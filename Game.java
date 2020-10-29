@@ -6,7 +6,7 @@ public class Game{
     private static String[] MENUCHOICES = { "Attack", "Swap", "Item", "Surrender" };
     /*
         Constructor
-        Creates the main menu
+        Runs the game
     */
     public int mainMenu(){
         System.out.println("Welcome to the pokemon game simulator!");
@@ -19,6 +19,7 @@ public class Game{
     }
 
     public int getInput(int minInput, int maxInput){
+        //Gets an integer from user between minimum and maximum
         int selection = -1;
         Scanner input = new Scanner(System.in);
         while(selection < minInput || selection > maxInput){
@@ -31,10 +32,14 @@ public class Game{
         return selection;
     }
 
-    public int battleMenu(){
-        int selection = -1;
-        int subSelection = -1;
+    public int battleMenu(Manager manager){
+        //The main option chosen
+        int chosenOption = -1;
+        //Any suboption chosen
+        int chosenSubOption = -1;
         boolean exitBattle = false;
+        //battleStatus: -1 need to swap pokemon, 0 battle continues, 1 battle over
+        int battleStatus = 0;
 
         while (exitBattle == false) {
             System.out.println("Please enter the selection you would like");
@@ -42,67 +47,77 @@ public class Game{
             for (int d = 0; d < MENUCHOICES.length; d++) {
                 System.out.printf("Enter %d for %s\n", d + 1, MENUCHOICES[d]);
             }
-            selection = getInput(1, 4);
-            switch(selection){
+            chosenOption = getInput(1, 4);
+            switch(chosenOption){
                 case 1:
-                    //show attacks
+                    //Show attacks
                     System.out.println("Select an attack: ");
                     currentPokemon.showAttacks();
-                    subSelection = getInput(1,4);
-                    //pick and apply attack
-                    battle.attack(subSelection);
+                    //Choose attack and apply
+                    chosenSubOption = getInput(1,4);
+                    manager.processTurn(chosenOption,chosenSubOption);
+                    break;
                 case 2:
-                    //show pokemon options
+                    //Show pokemon options - WILL NEED SOME GETTER/REPLACE WITH SYSTEM
                     System.out.println("Your options are: ");
                     boolean allFainted = true;
                     for(int i = 0; i <6; i++){
-                        if(battle.playerSet[i] != currentPokemon && !battle.playerSet[i].isFainted()){
-                            System.out.println(battle.playerSet[i]);
+                        if(manager.playerSet[i] != currentPokemon && !manager.playerSet[i].isFainted()){
+                            System.out.println(manager.playerSet[i]);
                             allFainted = false;
                         }
                     }
+                    //If there are no valid options
                     if(allFainted == true){
                         System.out.println("There are no valid options to swap!\n");
                         break;
                     }
-                    //get player choice
+                    //Get player choice
                     else{
-                        subSelection = getInput(1,6);
-                        currentPokemon = battle.setPokemon(subSelection);
+                        chosenSubOption = getInput(1,6);
+                        manager.processTurn(chosenOption,chosenSubOption);
+                        //currentPokemon = manager.setPokemon(chosenSubOption);
                         System.out.println("You have swapped in " + currentPokemon.getName())
                     }
+                    break;
                 case 3:
-                    //show items
+                    //Show items
                     System.out.println("Select an item: ");
-                    battle.showItems();
-                    subSelection = getInput(1,4);
-                    //pick and apply item
-                    battle.useItem(subSelection);
+                    manager.showPlayerItems();
+                    //Pick and apply item
+                    chosenSubOption = getInput(1,7);
+                    manager.processTurn(chosenOption,chosenSubOption);
+                    break;
                 case 4:
-                    //get confirmation then exit loop
+                    //Get confirmation then exit loop
                     System.out.println("Are you sure you want to surrender?");
                     System.out.println("1: Yes");
                     System.out.println("2: No");
-                    subSelection = getInput(1,2);
-                    if(subSelection == 1){
+                    chosenSubOption = getInput(1,2);
+                    if(chosenSubOption == 1){
+                        //Surrenders and resets the battle
+                        manager.surrender();
+                        manager.resetBattle();
                         exitBattle = true;
                     }
             }
+            //Checks for a winner after each round
+            exitBattle = manager.checkForWinner();
         }
 
-        return selection;
+        return chosenOption;
     }    
 
     public static void main (String[] args){
         
-        Game gameTest = new Game();
-        gameTest.mainMenu();
-        System.out.println("Choice is " + gameTest.choice);
-        if (gameTest.choice == 1){
-            Battle battle = new Battle();
-            battle.initializeBattle();
-            Pokemon currentPokemon = battle.getCurrentPokemon();
-            gameTest.battleMenu();
+        Game gameRunner = new Game();
+        gameRunner.mainMenu();
+        System.out.println("Choice is " + gameRunner.choice);
+        if (gameRunner.choice == 1){
+            Manager manager = new Manager();
+            manager.initializeBattle();
+            Pokemon currentPokemon = manager.getCurrentPokemon();
+            gameRunner.battleMenu(manager);
         }
         else
             return;
