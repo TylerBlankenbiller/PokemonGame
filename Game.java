@@ -58,26 +58,14 @@ public class Game{
                     manager.processTurn(chosenOption,chosenSubOption);
                     break;
                 case 2:
-                    //Show pokemon options - WILL NEED SOME GETTER/REPLACE WITH SYSTEM
-                    System.out.println("Your options are: ");
-                    boolean allFainted = true;
-                    for(int i = 0; i <6; i++){
-                        if(manager.playerSet[i] != currentPokemon && !manager.playerSet[i].isFainted()){
-                            System.out.println(manager.playerSet[i]);
-                            allFainted = false;
-                        }
-                    }
-                    //If there are no valid options
-                    if(allFainted == true){
-                        System.out.println("There are no valid options to swap!\n");
-                        break;
-                    }
-                    //Get player choice
-                    else{
-                        chosenSubOption = getInput(1,6);
+                    //Show pokemon options and get player choice
+                    chosenSubOption = displayBenchAndChoose(manager, currentPokemon.index());//Need a way to get the pokemon index
+                    
+                    //If there was a pokemon chosen, swap in. Otherwise return to battle menu
+                    if(chosenSubOption > -1){
                         manager.processTurn(chosenOption,chosenSubOption);
-                        //currentPokemon = manager.setPokemon(chosenSubOption);
-                        System.out.println("You have swapped in " + currentPokemon.getName())
+                        currentPokemon = manager.playerSet[chosenSubOption];//Need to figure out how to manage current pokemon
+                        System.out.println("You have swapped in " + currentPokemon.getName());//Need a way to get the pokemon name
                     }
                     break;
                 case 3:
@@ -95,18 +83,47 @@ public class Game{
                     System.out.println("2: No");
                     chosenSubOption = getInput(1,2);
                     if(chosenSubOption == 1){
-                        //Surrenders and resets the battle
+                        //Surrenders
                         manager.surrender();
-                        manager.resetBattle();
                         exitBattle = true;
                     }
             }
             //Checks for a winner after each round
             exitBattle = manager.checkForWinner();
+            if(exitBattle == false){
+                manager.changeTurn();
+                manager.processCPUTurn();
+                exitBattle = manager.checkForWinner();
+                manager.changeTurn();
+            }
         }
 
         return chosenOption;
     }    
+
+    public int displayBenchAndChoose(Manager manager, int currentPokemon){
+        //Returns -1 if no valid options
+        //Otherwise return index of chosen pokemon
+        boolean allFainted = true;
+        int chosenOption = -1;
+        System.out.println("Your options are: ");
+        for(int i = 0; i < 6 && i != currentPokemon; i++){
+            if(!manager.playerSet[i].isFainted()){
+                    System.out.println(i + ": " + manager.playerSet[i]);
+                    allFainted = false;
+                }
+            }
+         //If there are no valid options, return -1
+         if(allFainted == true){
+            System.out.println("There are no valid options to swap!\n");
+            chosenOption = -1;
+        }
+        //Otherwise, get choice
+        else{
+            chosenOption = getInput(1,6);
+        }
+        return chosenOption;
+    }
 
     public static void main (String[] args){
         
@@ -115,9 +132,16 @@ public class Game{
         System.out.println("Choice is " + gameRunner.choice);
         if (gameRunner.choice == 1){
             Manager manager = new Manager();
-            manager.initializeBattle();
-            Pokemon currentPokemon = manager.getCurrentPokemon();
+            manager.initializeBattle();//Set up the battle
+
+            //Display choices to user and set current pokemon
+            Pokemon currentPokemon = manager.playerSet[gameRunner.displayBenchAndChoose(manager, -1)];
+
+            //Loops through and runs the battle
             gameRunner.battleMenu(manager);
+
+            //Cleans up after the battle
+            manager.resetBattle();
         }
         else
             return;
