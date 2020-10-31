@@ -6,13 +6,13 @@ public class Manager{
     private Pokemon playerSet[6];
     // Player selected pokemon
     private int psPokemon = 0;
-    private Item playerItems[7]; /* Size? */
+    private Item playerItems[7]; 
     
     // Opponent data
     private Pokemon opponentSet[3];
     // Opponent selected pokemon
     private int osPokemon = 0;
-    private Item opponentItems[7]; /* Size? */
+    private Item opponentItems[7]; 
     
     // Round data
     
@@ -84,6 +84,18 @@ public class Manager{
         }
         return 1;
 
+    }
+    
+    public Pokemon[] getPlayerPokemon(){
+        return this.playerSet;
+    }
+    
+    public Pokemon getPSPokemon(){
+        return this.playerSet[psPokemon];
+    }
+    
+    public Item[] getPlayerItems(){
+        return this.playerItems;
     }
     
     private void processCPUTurn(){
