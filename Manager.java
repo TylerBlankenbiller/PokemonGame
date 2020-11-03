@@ -90,7 +90,7 @@ public class Manager{
 
     }
     
-    private void processCPUTurn(){
+    public void processCPUTurn(){
         // Choose random number for menu item (either attack, use item, swap)
         int menuOption = rand.nextInt(3) + 1;
         int subMenuOption = 0;
