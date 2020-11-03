@@ -2,7 +2,7 @@
 import java.util.Scanner;
 
 public class Game{
-    int choice;
+    int choice = 1;
     private static String[] MENUCHOICES = { "Attack", "Swap", "Item", "Surrender" };
     /*
         Constructor
@@ -32,7 +32,7 @@ public class Game{
         return selection;
     }
 
-    public int battleMenu(Manager manager){
+    public int battleMenu(Manager manager, Pokemon currentPokemon){
         //The main option chosen
         int chosenOption = -1;
         //Any suboption chosen
@@ -52,7 +52,7 @@ public class Game{
                 case 1:
                     //Show attacks
                     System.out.println("Select an attack: ");
-                    currentPokemon.showAttacks();
+                    currentPokemon.getAttacks();
                     //Choose attack and apply
                     chosenSubOption = getInput(1,4);
                     manager.processTurn(chosenOption,chosenSubOption);
@@ -64,14 +64,14 @@ public class Game{
                     //If there was a pokemon chosen, swap in. Otherwise return to battle menu
                     if(chosenSubOption > -1){
                         manager.processTurn(chosenOption,chosenSubOption);
-                        currentPokemon = manager.playerSet[chosenSubOption];//Need to figure out how to manage current pokemon
+                        currentPokemon = manager.setPlayerPokemon(chosenSubOption);//Need to figure out how to manage current pokemon
                         System.out.println("You have swapped in " + currentPokemon.getName());//Need a way to get the pokemon name
                     }
                     break;
                 case 3:
                     //Show items
                     System.out.println("Select an item: ");
-                    manager.showPlayerItems();
+                    manager.getPlayerItems();
                     //Pick and apply item
                     chosenSubOption = getInput(1,7);
                     manager.processTurn(chosenOption,chosenSubOption);
@@ -130,21 +130,20 @@ public class Game{
         Game gameRunner = new Game();
         gameRunner.mainMenu();
         System.out.println("Choice is " + gameRunner.choice);
-        if (gameRunner.choice == 1){
+        while (gameRunner.choice == 1){
             Manager manager = new Manager();
             manager.initializeBattle();//Set up the battle
 
             //Display choices to user and set current pokemon
-            Pokemon currentPokemon = manager.playerSet[gameRunner.displayBenchAndChoose(manager, -1)];
+            Pokemon currentPokemon = manager.setPlayerPokemon(gameRunner.displayBenchAndChoose(manager, -1));
 
             //Loops through and runs the battle
-            gameRunner.battleMenu(manager);
+            gameRunner.battleMenu(manager, currentPokemon);
 
             //Cleans up after the battle
             manager.resetBattle();
+            gameRunner.mainMenu();
         }
-        else
-            return;
         
     }
 
