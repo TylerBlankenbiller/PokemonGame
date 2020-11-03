@@ -51,10 +51,14 @@ public class Manager{
         switch(menuOption){
             case 1: // Attack
                 if(playerTurn == 0){
-                    damageApplied = playerSet[psPokemon].getAttacks()[subMenuOption-1].applyAttack(opponentSet[osPokemon]);
+                    damageApplied = playerSet[psPokemon]
+                                    .getAttacks()[subMenuOption-1]
+                                    .applyAttack(opponentSet[osPokemon]);
                 }
                 else{
-                    damageApplied = opponentSet[osPokemon].getAttacks()[subMenuOption-1].applyAttack(playerSet[psPokemon]);
+                    damageApplied = opponentSet[osPokemon]
+                                    .getAttacks()[subMenuOption-1]
+                                    .applyAttack(playerSet[psPokemon]);
                 }
                 break;
             case 3: // Item
@@ -86,6 +90,22 @@ public class Manager{
 
     }
     
+    private void processCPUTurn(){
+        // Choose random number for menu item (either attack, use item, swap)
+        int menuOption = rand.nextInt(3) + 1;
+        int subMenuOption = 0;
+        // Choose random number for sub menu options depending on menu option
+        if(menuOption == 1 || menuOption == 3){
+            subMenuOption = rand.nextInt(4) + 1;
+        }
+        else{
+            subMenuOption = rand.nextInt(3) + 1;
+        }
+        
+        // Process CPU turn
+        processTurn(menuOption, subMenuOption);
+    }
+    
     public Pokemon[] getPlayerPokemon(){
         return this.playerSet;
     }
@@ -98,9 +118,6 @@ public class Manager{
         return this.playerItems;
     }
     
-    private void processCPUTurn(){
-        
-    }
     
     public void changeTurn(){
         // Alternate between 0 and 1 (0 for player, 1 for opponent)
