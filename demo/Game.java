@@ -117,8 +117,8 @@ public class Game{
         boolean allFainted = true;
         int chosenOption = -1;
         System.out.println("Your options are: ");
-        for(int i = 0; i < 6 && i != currentPokemon; i++){
-            if(!playerPokemon[i].isFainted()){
+        for(int i = 0; i < 6; i++){
+            if(!playerPokemon[i].isFainted() && i+1 != currentPokemon){
                     System.out.println(i+1 + ": " + playerPokemon[i].getName());
                     allFainted = false;
                 }
