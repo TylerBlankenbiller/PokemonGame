@@ -22,6 +22,8 @@ public class Manager{
     private float damageApplied = 0;
     // Round data
     
+    private String data = "";
+    
     public Manager(){
         this.playerTurn = 0;
         this.winner = "";
@@ -98,46 +100,50 @@ public class Manager{
                     this.damageApplied = playerSet[psPokemon]
                                     .getAttacks()[subMenuOption-1]
                                     .applyAttack(opponentSet[osPokemon]);
-                    System.out.println(playerSet[psPokemon].getName() 
-                                        + " (Player) has applied " 
+                    data = playerSet[psPokemon].getName() 
+                                        + " (Player) has used " + playerSet[psPokemon]
+                                                .getAttacks()[subMenuOption-1].getName() + " and applied " 
                                         + this.damageApplied + " damage to " 
                                         + opponentSet[osPokemon].getName() 
-                                        + " (Opponent).");
+                                        + " (Opponent).";
                 }
                 else{
                     this.damageApplied = opponentSet[osPokemon]
                                     .getAttacks()[subMenuOption-1]
                                     .applyAttack(playerSet[psPokemon]);
-                    System.out.println(opponentSet[osPokemon].getName() 
-                                        + " (Opponent) has applied " 
+                    data = opponentSet[osPokemon].getName() 
+                                        + " (Opponent) has used " + opponentSet[osPokemon]
+                                                .getAttacks()[subMenuOption-1].getName() + " applied " 
                                         + this.damageApplied + " damage to " 
                                         + playerSet[psPokemon].getName() 
-                                        + " (Player).");
+                                        + " (Player).";
                 }
                 break;
             case 3: // Item
                 if(playerTurn == 0){
                     // ASSUMPTION: Items can only be used on selected pokemon 
                     playerItems[subMenuOption-1].applyItem(playerSet[psPokemon]);
-                    System.out.println("Player has applied " 
+                    data = "Player has used " 
                                         + playerItems[subMenuOption-1].getName() 
-                                        + " to " + playerSet[psPokemon].getName() 
-                                        + ".");
+                                        + " on " + playerSet[psPokemon].getName() 
+                                        + ".";
                 }
                 else{
                     opponentItems[subMenuOption-1].applyItem(opponentSet[osPokemon]);
-                    System.out.println("Opponent has applied " 
+                    data = "Opponent has used " 
                                         + opponentItems[subMenuOption-1].getName() 
-                                        + " to " + opponentSet[psPokemon].getName() 
-                                        + ".");
+                                        + " on " + opponentSet[psPokemon].getName() 
+                                        + ".";
                 }
                 break;
             case 4: // Swap
                 if(playerTurn == 0){
                     psPokemon = subMenuOption - 1;
+                    data = "Player has swapped to " + playerSet[psPokemon].getName() + ".";
                 }
                 else{
                     osPokemon = subMenuOption - 1;
+                    data = "Opponent has swapped to " + opponentSet[osPokemon].getName() + ".";
                 }
                 break;
         }
@@ -155,7 +161,8 @@ public class Manager{
 
     }
     
-    public void processCPUTurn(){
+    public int processCPUTurn(){
+    	playerTurn = 1;
         Random rand = new Random(); 
         // Choose random number for menu item (either attack, use item, swap)
         int menuOption = rand.nextInt(3) + 1;
@@ -174,6 +181,9 @@ public class Manager{
        // System.out.println(menuOption + " " + subMenuOption);
         // Process CPU turn
         processTurn(menuOption, subMenuOption);
+        playerTurn = 0;
+        
+        return menuOption;
     }
     
     public Pokemon[] getPlayerPokemon(){
@@ -202,6 +212,10 @@ public class Manager{
         else{
             this.playerTurn = 0;
         }
+    }
+    
+    public String getData() {
+    	return this.data;
     }
     
     public String getWinner(){
