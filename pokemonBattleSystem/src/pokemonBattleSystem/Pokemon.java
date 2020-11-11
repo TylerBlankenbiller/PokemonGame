@@ -19,7 +19,7 @@ public class Pokemon
   /*
       Constructor
       PokemonName - Name of Pokemon Object to create
-      Creates specific Pokemon Object based on string arugment
+      Creates specific Pokemon Object based on string argument
   */
   public Pokemon(String PokemonName){
     /*  if(PokemonName == null){
@@ -32,7 +32,7 @@ public class Pokemon
           setStats(50, 6, 6, "Grass", pokemonAttacks);
       }
       else if(PokemonName.equalsIgnoreCase("Charizard")){
-          String[] pokemonAttacks = {};
+          String[] pokemonAttacks = {""};
           setStats(50, 7, 5, "Fire", pokemonAttacks);
       }
       else if(PokemonName.equalsIgnoreCase("Blastoise")){
@@ -101,30 +101,30 @@ public class Pokemon
   }
   
   //Set Functions
-  void SetOffenseStatus(int statusChange){
+  void setOffenseStatus(int statusChange){
       OffensePointer += statusChange;
       OffenseStatus = OffenseList[OffensePointer];
   }
   
-  void SetDefenseStatus(int statusChange){
+  void setDefenseStatus(int statusChange){
       DefensePointer += statusChange;
       DefenseStatus = DefenseList[DefensePointer];
   }
   
-  int SetHP(int damage, float offense){
+  int setHP(int damage, float offense){
       int applyDamage = Math.round((offense * damage) / DefenseStatus);
       HP -= applyDamage;
       return applyDamage;
   }
   
   //Get Functions
-  float GetOffenseStatus(){
+  float getOffenseStatus(){
       return OffenseStatus;
   }
-  float GetDefenseStatus(){
+  float getDefenseStatus(){
       return DefenseStatus;
   }
-  int GetHP(){
+  int getHP(){
       return HP;
   }
   
