@@ -1,3 +1,8 @@
+/************************************************************/
+/* Filename: Item.java */
+/* Purpose: Class that holds item values and applies them to target*/
+/************************************************************/
+
 package pokemonBattleSystem;
 
 public class Item{

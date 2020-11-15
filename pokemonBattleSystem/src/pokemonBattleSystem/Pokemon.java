@@ -1,3 +1,8 @@
+/************************************************************/
+/* Filename: Pokemon.java */
+/* Purpose: Class that is instantiated for each pokemon in the battle*/
+/************************************************************/
+
 package pokemonBattleSystem;
 
 //Pokemon Factory
@@ -34,7 +39,7 @@ public class Pokemon
           setStats(100, 6, 6, "Grass", pokemonAttacks);
       }
       else if(PokemonName.equalsIgnoreCase("Charizard")){
-          String[] pokemonAttacks = {};
+          String[] pokemonAttacks = {"Fire Breath", "Wing Attack", "Ember", "Slash"};
           setStats(100, 7, 5, "Fire", pokemonAttacks);
       }
       else if(PokemonName.equalsIgnoreCase("Blastoise")){
@@ -103,30 +108,30 @@ public class Pokemon
   }
   
   //Set Functions
-  void SetOffenseStatus(int statusChange){
+  void setOffenseStatus(int statusChange){
       OffensePointer += statusChange;
       OffenseStatus = OffenseList[OffensePointer];
   }
   
-  void SetDefenseStatus(int statusChange){
+  void setDefenseStatus(int statusChange){
       DefensePointer += statusChange;
       DefenseStatus = DefenseList[DefensePointer];
   }
   
-  int SetHP(int damage, float offense){
+  int setHP(int damage, float offense){
       int applyDamage = Math.round((offense * damage) / DefenseStatus);
       HP -= applyDamage;
       return applyDamage;
   }
   
   //Get Functions
-  float GetOffenseStatus(){
+  float getOffenseStatus(){
       return OffenseStatus;
   }
-  float GetDefenseStatus(){
+  float getDefenseStatus(){
       return DefenseStatus;
   }
-  int GetHP(){
+  int getHP(){
       return HP;
   }
   

@@ -1,3 +1,8 @@
+/************************************************************/
+/* Filename: Attack.java */
+/* Purpose: Class that applies damage and status changes to pokemon*/
+/************************************************************/
+
 package pokemonBattleSystem;
 
 //Attack Class
@@ -11,7 +16,7 @@ public class Attack
   /*
       Constructor
       AttackName - Name of Attack Object to create
-      Creates specific Attack Object based on string arugment
+      Creates specific Attack Object based on string argument
   */
   public Attack(String AttackName){
      /* if(AttackName == null){
@@ -43,6 +48,12 @@ public class Attack
       else if(AttackName.equalsIgnoreCase("Fire Breath")){
           setStats(new int[]{60, 0}, new int[]{0, -1}, new String[]{"Opponent", "OpponentOffense"});
       }
+      else if(AttackName.equalsIgnoreCase("Wing Attack")){
+          setStats(new int[]{60}, new int[]{0}, new String[]{"Opponent"});
+      }
+      else if(AttackName.equalsIgnoreCase("Ember")){
+          setStats(new int[]{40}, new int[]{0}, new String[]{"Opponent"});
+      }
       else{
           System.out.println("Sorry we don't support that Move ");
          // return null;
@@ -54,7 +65,7 @@ public class Attack
   }
   
   public float applyAttack(Pokemon target){
-	  float damage = target.SetHP(25, 10);
+	  float damage = target.setHP(25, 10);
       return damage;
   }
   
