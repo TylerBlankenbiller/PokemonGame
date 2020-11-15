@@ -2,17 +2,17 @@ package pokemonBattleSystem;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
+//import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.Toolkit;
+//import java.awt.Image;
+//import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.IOException;
-import java.util.concurrent.CountDownLatch;
+//import java.io.IOException;
+//import java.util.concurrent.CountDownLatch;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -28,49 +28,46 @@ import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.Timer;
+import javax.swing.WindowConstants;
 import javax.swing.border.LineBorder;
 
 public class Game extends JFrame {
 	private JFrame frame = new JFrame();
-	private JPanel panelStart = new JPanel();
+
     private JLayeredPane lpane = new JLayeredPane();
-    private JPanel panelMenu = new JPanel();
-    private JPanel panelGreen = new JPanel();
-    private JPanel panelRed = new JPanel();
-	private JPanel panelOrange = new JPanel(new FlowLayout());
-	private JPanel panelBlue = new JPanel();
-	private JPanel panelPurple = new JPanel(new GridLayout(0, 3));
-	private JPanel panelBrown = new JPanel();
-	private JPanel panelPink = new JPanel();
-	private JButton buttonsMainMenu[] = {new JButton("Attack"), new JButton("Swap"), new JButton("Use Item"), new JButton("Surrender")};
-	private JButton buttonsSubMenu[] = new JButton[6];
-	private JPanel panelPokemonData[] = new JPanel[6];
-	private JLabel labelPokemonData[] = new JLabel[6];
 
-	private JPanel panelEffect[] = new JPanel[2];
-
-	private JPanel panelYellow = new JPanel(new GridLayout(0, 2));
-private int t = 1;
-	private JPanel panelData = new JPanel();
-	private JLabel optionData = new JLabel("");
-	private JButton start = new JButton("Start");
-	private JButton quit = new JButton("Quit");
-	private boolean swap = false;
+    private JPanel subpanels[] = new JPanel[13];
+    
+	private JPanel panelPokemonData[] = new JPanel[3];
+	private JLabel labelPokemonData[] = new JLabel[3];
+	
 	private ImageIcon imagePokemon[] = new ImageIcon[4];
 	private JLabel labelPokemon[] = new JLabel[4];
 	
-    
-    private int delay = 800;
+	private JLabel currentPokemonName[] = new JLabel[2];
+	private JProgressBar pokemonHPBar[] = new JProgressBar[2];
+	private JLabel currentPokemonStats[] = new JLabel[2];
+	
+	private JButton buttonsMainMenu[] = {new JButton("Attack"), new JButton("Swap"), new JButton("Use Item"), new JButton("Surrender")};
+	private JButton buttonsSubMenu[] = new JButton[4];
+
+	
+	private int t = 0;
+	
+	private JLabel optionData = new JLabel("");
+	private JButton startButtons[] = {new JButton("Start"), new JButton("Quit")};
+
 	private String option = "";
 	private AudioInputStream audioIn;
 	private Clip clip;
 	private Clip soundEffect;
 	private boolean selectFirst = false;
-	private static Manager manager = new Manager();
+	private static Manager manager;
 	private Clicklistener click= new Clicklistener();
+	
   public static void main(String[] args) {
-	  manager.initializeBattle();
 	  new Game();  
+	  manager = new Manager();
   }
 
   
@@ -80,142 +77,243 @@ private int t = 1;
 	  Timer timer3;
 	  Timer timer4;
 	  public void actionPerformed(ActionEvent e){
-		  if(e.getSource() == start) {
-			  File soundFile = new File("sound/Pokemon Battle Sound Track.wav");
-			  try {
-				audioIn = AudioSystem.getAudioInputStream(soundFile);
-				clip = AudioSystem.getClip();
-				clip.open(audioIn);
-				clip.loop(Clip.LOOP_CONTINUOUSLY);
-			  } catch (UnsupportedAudioFileException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			  } catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			  } catch (LineUnavailableException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			  panelStart.setVisible(false);
-			  lpane.setVisible(true);
-			  selectFirst = true;
-			  //showOpponent();
-			  swapAnimation(0, 1, "images/pokeball.gif", "images/open pokeball.png", "images/c2temp.png", "images/c2.png", "", "", "", "");
-			  //test();
-			  displayPokemon();
-			  
+		  if(e.getSource() == startButtons[0]) {
+			  processStart();
 		  }
 		  if(selectFirst) {
-			 for(int i = 0; i < buttonsSubMenu.length; i++) {
-				 if(e.getSource() == buttonsSubMenu[i]) {
-					 manager.setPSPokemon(i);
-					 selectFirst = false;
-					 for(int j = 0; j < buttonsMainMenu.length; j++) {
-						 buttonsMainMenu[j].setEnabled(true);
-					 }
-					 panelYellow.setVisible(false);
-					 //swapAnimation(0, 0, manager.getPlayerPokemon()[i]);
-					 swapAnimation(0, 0, "images/pokeball.gif", "images/open pokeball.png", "images/v3temp.png", "images/v3.gif", "", "", "", "");
-					 break;
-				 }
-			 }
+			 processStartSelection(e);
 		  }
-		  if(e.getSource() == quit) {
+		  if(e.getSource() == startButtons[1]) {
 			  System.exit(0);
 		  }
 		  if (e.getSource() == buttonsMainMenu[0] || e.getSource() == buttonsMainMenu[1]
 				  || e.getSource() == buttonsMainMenu[2] || e.getSource() == buttonsMainMenu[3]){
-			  panelYellow.setVisible(true);
+			  
+			  processMainOption(e);
 		  }
 		  else if(!selectFirst){
-			  panelYellow.setVisible(false);
+			  subpanels[9].setVisible(false);
 		  }
-		  
-		  if(e.getSource() == buttonsMainMenu[0] || e.getSource() == buttonsMainMenu[2]) {
-			  if(e.getSource() == buttonsMainMenu[0]) {
-				  option = "attack";
-			  }
-			  else if(e.getSource() == buttonsMainMenu[2]) {
-				  option = "useItem";
-			  }
-			  buttonsSubMenu[2].setVisible(true);
-			  buttonsSubMenu[3].setVisible(true);
-			  buttonsSubMenu[4].setVisible(false);
-			  buttonsSubMenu[5].setVisible(false);
-			  setButtons();
-		  }
-		  if(e.getSource() == buttonsMainMenu[1]) {
-			  for(int i = 2; i < buttonsSubMenu.length; i++) {
-				  buttonsSubMenu[i].setVisible(true);
-			  }
-			  option = "swap";
-			  setButtons();
-		  }
-		  if(e.getSource() == buttonsMainMenu[3]) {
-			  for(int i = 2; i < buttonsSubMenu.length; i++) {
-				  buttonsSubMenu[i].setVisible(false);
-			  }
-			  option = "surrender";
-			  setButtons();
-		  }
-
 		  if(option.equals("surrender")) {
 			  if(e.getSource() == buttonsSubMenu[0]) {
-				  if (clip.isRunning()) { 
+				/*  if (clip.isRunning()) { 
 					  clip.stop();
-				  }
+				  }*/
 				  reset();
 				  option = "";
 			  }
 			  else if(e.getSource() == buttonsSubMenu[1]) {
-				  panelYellow.setVisible(false);
+				  subpanels[9].setVisible(false);
 			  }
 		  }
-
-		  if(option.equals("swap")) {
-			  for(int i = 0; i < buttonsSubMenu.length; i++) {
-				  if(e.getSource() == buttonsSubMenu[i]) {
-					  int index = manager.getPSPokemon();
-					  manager.setPSPokemon(i);
-					  buttonsSubMenu[index].setEnabled(true);
-					  swapAnimation(1, 0, "images/v3.gif","images/v3temp.png","images/open pokeball.png","images/pokeball.gif", "images/pokeball.gif", "images/open pokeball.png", "images/v3temp.png", "images/v3.gif");
-					  manager.processTurn(4, i+1);
-					  String data = manager.getData();
-	      			  	optionData.setText(data);
-					  completeRound();
-					  break;
-				  }
+		  if(option.equals("endGame")) {
+			  if(e.getSource() == buttonsSubMenu[0]) {
+				/*  if (clip.isRunning()) { 
+					  clip.stop();
+				  }*/
+				  reset();
+				  option = "";
+				  subpanels[0].setVisible(true);
 			  }
+			  else if(e.getSource() == buttonsSubMenu[1]) {
+				  System.exit(0);
+			  }
+		  }
+		  if(option.equals("swap")) {
+			  processSwap(e);  
 		  }
 		  if(option.equals("attack")) {
-			  for(int i = 0; i < buttonsSubMenu.length; i++) {
-				  if(e.getSource() == buttonsSubMenu[i]) {
-					  option = "";
-					  effectAnimation(1, "images/damage.png", "sound/emerald_000D.wav");
-					  manager.processTurn(1, i+1);
-					  String data = manager.getData();
-	      			  	optionData.setText(data);
-					  completeRound();
-					  break;
-				  }
-			  }
-			  
+			  processAttack(e);  
 		  }
-		  
 		  if(option.equals("useItem")) {
-			  for(int i = 0; i < buttonsSubMenu.length; i++) {
-				  if(e.getSource() == buttonsSubMenu[i]) {
-					  effectAnimation(0, "images/item.png", "sound/emerald_000F.wav");
-					  manager.processTurn(3, i+1);
-					  String data = manager.getData();
-	      			  	optionData.setText(data);
+			  processUseItem(e);  
+		  }
+	  }
+	  
+	  public void processStart() {
+		  manager.initializeBattle();  
+		  File soundFile = new File("sound/Pokemon Battle Sound Track.wav");
+		 /* try {
+			audioIn = AudioSystem.getAudioInputStream(soundFile);
+			clip = AudioSystem.getClip();
+			clip.open(audioIn);
+			clip.loop(Clip.LOOP_CONTINUOUSLY);
+		  } catch (UnsupportedAudioFileException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		  } catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		  } catch (LineUnavailableException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}*/
+		  //panelStart.setVisible(false);
+		  subpanels[0].setVisible(false);
+		  lpane.setVisible(true);
+		  selectFirst = true;
+		  String arr[] = {"images/pokeball.gif", "images/open pokeball.png", "images/c2temp.png", "images/c2.png"};
+		  swapAnimation(3, 1, arr, 0);
+		  Pokemon opponentPokemon = manager.getOSPokemon();
+		  currentPokemonName[1].setText(opponentPokemon.getName());
+    	  currentPokemonStats[1].setText("Off: " + opponentPokemon.GetOffenseStatus() + " Def: " + opponentPokemon.GetDefenseStatus());
+    	  Pokemon playerPokemon[] = manager.getPlayerPokemon();
+    	  for(int i = 0; i < playerPokemon.length; i++) {
+    		  labelPokemonData[i].setText("<html>" + playerPokemon[i].getName() 
+    				  					+ "<br>HP: " + playerPokemon[i].GetHP() 
+    				  					+ "<br>Def: " + playerPokemon[i].GetDefenseStatus() 
+    				  					+ " Off: " + playerPokemon[i].GetOffenseStatus() + "</html>");
+    	  }
+	  }
+	  
+	  public void processStartSelection(ActionEvent e) {
+		  displayPokemon();
+			 for(int i = 0; i < buttonsSubMenu.length; i++) {
+				 if(e.getSource() == buttonsSubMenu[i]) {
+					 manager.setPSPokemon(i);
+					 //selectFirst = false;
+					 enableMainMenu(true);
+					 subpanels[9].setVisible(false);
+					 //swapAnimation(0, 0, manager.getPlayerPokemon()[i]);
+					 String arr[] = {"images/pokeball.gif", "images/open pokeball.png", "images/v3temp.png", "images/v3.gif"};
+					 swapAnimation(3, 0, arr, 0);
+					 Pokemon playerPokemon = manager.getPSPokemon();
+					  currentPokemonName[0].setText(playerPokemon.getName());
+			    	  currentPokemonStats[0].setText("Off: " + playerPokemon.GetOffenseStatus() + " Def: " + playerPokemon.GetDefenseStatus());
+					 //swapAnimation(0, 0, "images/pokeball.gif", "images/open pokeball.png", "images/v3temp.png", "images/v3.gif", "", "", "", "");
+					 break;
+				 }
+			 }
+	  }
+	  
+	  public void processMainOption(ActionEvent e) {
+		  subpanels[9].setVisible(true);
+		  if(e.getSource() == buttonsMainMenu[0]) {
+			  option = "attack";
+		  }
+		  else if(e.getSource() == buttonsMainMenu[2]) {
+			  option = "useItem";
+		  }
+			  
+		  else if(e.getSource() == buttonsMainMenu[1]) {
+			  option = "swap";
+		  }
+		  else if(e.getSource() == buttonsMainMenu[3]) {	  
+			  option = "surrender";
+		  }
+		  setButtons();
+	  }
+	  
+	  public void processSwap(ActionEvent e) {
+		  for(int i = 0; i < buttonsSubMenu.length; i++) {
+			  if(e.getSource() == buttonsSubMenu[i]) {
+				  Pokemon playerPokemon = manager.getPSPokemon();
+				 // int index = manager.getPSPokemon();
+				 // manager.setPSPokemon(i);
+				  buttonsSubMenu[i].setEnabled(true);
+				  manager.processTurn(4, i+1);
+				  String arr[] = {"images/v3.gif","images/v3temp.png","images/open pokeball.png","images/pokeball.gif", "images/pokeball.gif", "images/open pokeball.png", "images/v3temp.png", "images/v3.gif"};
+				  swapAnimation(7, 0, arr, 0);
+				  
+				  //swapAnimation(1, 0, "images/v3.gif","images/v3temp.png","images/open pokeball.png","images/pokeball.gif", "images/pokeball.gif", "images/open pokeball.png", "images/v3temp.png", "images/v3.gif");
+				 if(t == 0) {
+				  
+				  String data = manager.getData();
+      			  	optionData.setText(data);
+				  completeRound();
+				 }
+				 else {
+					 
+					 optionData.setText("Player has swapped to " + playerPokemon.getName() + ".");
+					 
+				 }
+    		    	//pokemonHPBar[0].setValue(p[i].GetHP());
+    		    	currentPokemonName[0].setText(playerPokemon.getName());
+    		    	  currentPokemonStats[0].setText("Off: " + playerPokemon.GetOffenseStatus() + " Def: " + playerPokemon.GetDefenseStatus());
+				// t = 0;
+				  break;
+			  }
+		  }
+	  }
+	  
+	  public void processAttack(ActionEvent e) {
+		  for(int i = 0; i < buttonsSubMenu.length; i++) {
+			  if(e.getSource() == buttonsSubMenu[i]) {
+				  option = "";
+				  effectAnimation(1, "images/damage.png", "sound/emerald_000D.wav");
+				  manager.processTurn(1, i+1);
+				  String data = manager.getData();
+				  optionData.setText(data);
+				  Pokemon opponentPokemon = manager.getOSPokemon();
+      			 // int osPokemon = manager.getOSPokemon();
+				  pokemonHPBar[1].setValue(opponentPokemon.GetHP());
+				 // System.out.print(opponentPokemon.GetHP());
+				  if(manager.checkForWinner()) {
+					  endGame();
+					  return;
+				  }
+				  else if(opponentPokemon.GetHP() <= 0) {
+					  manager.processCPUTurn();
+					  String arr[] = {"images/c2.png","images/c2temp.png","images/open pokeball.png","images/pokeball.gif", "images/pokeball.gif", "images/open pokeball.png", "images/v3temp.png", "images/v3.gif"};
+					  swapAnimation(7, 1, arr, 0);
+					  opponentPokemon = manager.getOSPokemon();
+					  //pokemonHPBar[1].setValue(p[osPokemon].GetHP());
+					  //optionData.setText("Opponent has swapped to " + p[osPokemon].getName() + ".");
+					  currentPokemonName[1].setText(opponentPokemon.getName());
+    		    	  currentPokemonStats[1].setText("Off: " + opponentPokemon.GetOffenseStatus() + " Def: " + opponentPokemon.GetDefenseStatus());
+    		    	  //String data = manager.getData();
+	      			  //	optionData.setText(data);
 					  completeRound();
 					  break;
 				  }
+				  else {
+					   //data = manager.getData();
+	      			  	//optionData.setText(data);
+					  completeRound();
+					  break;
+				  }
+				  
 			  }
 		  }
+	  }
+	  
+	  public void processUseItem(ActionEvent e) {
+		  for(int i = 0; i < buttonsSubMenu.length; i++) {
+			  if(e.getSource() == buttonsSubMenu[i]) {
+				  effectAnimation(0, "images/item.png", "sound/emerald_000F.wav");
+				  manager.processTurn(3, i+1);
+				  String data = manager.getData();
+      			  	optionData.setText(data);
+				  completeRound();
+				  break;
+			  }
+		  }
+	  }
+	  
+	  public void endGame() {
+		  String winner = manager.getWinner();
+		  
+		  if(winner == "Player") {
+			  String arr[] = {"images/c2.png","images/c2temp.png","images/open pokeball.png","images/pokeball.gif"};
+			  swapAnimation(3, 1, arr, 0);
+		  }
+		  else {
+			  String arr[] = {"images/v3.gif","images/v3temp.png","images/open pokeball.png","images/pokeball.gif"};
+			  swapAnimation(3, 0, arr, 0);
+		  }
+		  //optionData.setText(winner + " has won the game!");
+		  timer3 = new Timer(0, new ActionListener() {
+			   
+	            public void actionPerformed(ActionEvent e) {
+	            	timer3.stop();
+	            	optionData.setText(winner + " has won the game!");
+	            	option = "endGame";
+	            	setButtons();
+	            }
+	         });
 
+		    timer3.setInitialDelay(1000);
+	    	 timer3.start();
 	  }
 	  
 	  public void completeRound() {
@@ -239,26 +337,63 @@ private int t = 1;
 	            			sound = "sound/emerald_000F.wav";
 	            			effectAnimation(1, effectImage, sound);
 	            		}
-	            		else if (index == 4){
+	            		/*else if (index == 4){
 	            			swapAnimation(1, 0, "images/c3.png","images/c3temp.png","images/open pokeball.png","images/pokeball.gif", "images/pokeball.gif", "images/open pokeball.png", "images/c3temp.png", "images/c3.png");
-	            		}
+	            		}*/
 	            		String data = manager.getData();
 	      			  	optionData.setText(data);
 	      			  	option = "";
-	      			  for(int i = 0; i < buttonsMainMenu.length; i++) {
-	      				  buttonsMainMenu[i].setEnabled(true);
+	      			  	
+	      			  enableMainMenu(true);
+	      			  Pokemon playerPokemon = manager.getPSPokemon();
+	      			  //int psPokemon = manager.getPSPokemon();
+	      			  String pokemonNameLabel = playerPokemon.getName();
+	      			  float pokemonHPLabel = playerPokemon.GetHP();
+	      			  if(manager.checkForWinner()) {
+						  endGame();
+					  }
+	      			  else if(playerPokemon.isFainted()) {
+	      				  t = 1;
+	      				  pokemonNameLabel += " (Fainted)";
+	      				  pokemonHPLabel = 0;
 	      			  }
+	      			  else {
+	      				  t = 0;
+	      			  }
+	      			labelPokemonData[playerPokemon.getIndex()].setText("<html>" + pokemonNameLabel 
+  					+ "<br>HP: " + pokemonHPLabel
+  					+ "<br>Def: " + playerPokemon.GetDefenseStatus() 
+  					+ " Off: " + playerPokemon.GetOffenseStatus() + "</html>");
+	      			  pokemonHPBar[0].setValue(playerPokemon.GetHP());
+	      			//displayPokemon();
 	      			  timer4.stop();
+	      			  if(t == 1) {
+	      				  option = "swap";
+	      				enableMainMenu(false);
+	      				//Pokemon playerSet[] = manager.getPlayerPokemon();
+	      				setButtons();
+	      				/*for(int i = 0; i < playerSet.length; i++) {
+	      					buttonsSubMenu[i].setVisible(true);
+	      					if(playerSet[i].isFainted() || i == manager.getPSPokemon().getIndex()) {
+	      						buttonsSubMenu[i].setEnabled(false);
+	      					}
+		      				  buttonsSubMenu[i].setText(playerSet[i].getName());
+		      			  }*/
+	      				subpanels[9].setVisible(true);
+	      				//swapAnimation(0, 0, "images/v3.gif","images/v3temp.png","images/open pokeball.png","images/pokeball.gif", "", "", "", "");
+	      			  }
+	      			
 	            }
 	         });
-		   timer4.setInitialDelay(3250);
+		   timer4.setInitialDelay(2500);
  	    	 timer4.start();
-		   
+ 	    	
+ 	    	
 	  }
 	  
 	  public void effectAnimation(int index, String image, String sound) {
 		  File soundFile = new File(sound);
-		   try {
+		 /*  try {
 			audioIn = AudioSystem.getAudioInputStream(soundFile);
 			soundEffect = AudioSystem.getClip();
 			soundEffect.open(audioIn);
@@ -273,363 +408,278 @@ private int t = 1;
 		  } catch (LineUnavailableException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
-		}
+		}*/
 		  imagePokemon[index+2] = new ImageIcon(image);
 		  labelPokemon[index+2].setIcon(imagePokemon[index+2]);
-		  panelEffect[index].setVisible(true);
-		  timer1 = new Timer(0, new ActionListener() {
+		  subpanels[4+index].setVisible(true);
+		  timer2 = new Timer(0, new ActionListener() {
 			   
 	            public void actionPerformed(ActionEvent e) {
-	            	panelEffect[index].setVisible(false);
-	            	timer1.stop();
+	            	subpanels[4+index].setVisible(false);
+	            	timer2.stop();
 	            }
 	         });
 
-		    timer1.setInitialDelay(300);
-	    	 timer1.start();
+		    timer2.setInitialDelay(300);
+	    	 timer2.start();
 		  
 	  }
 	  
-	  public void swapAnimation(int loop, int index, String image1, String image2, String image3, String image4, String image5, String image6, String image7, String image8) {
-	   //   try {
-		  
-		  /*	if(animationType == 0) {
-		  			image1 = "images/pokeball.gif";
-		  			image2 = "images/open pokeball.png";
-		  			//image3 = pokemonToSwap.getImage(player, 0);
-		  			//image4 = pokemonToSwap.getImage(player, 1);
-		  			image3 = "images/v3temp.png";
-		  			image4 = "images/v3.gif";
-		  		
-		  	}
-		  	else {
-		  		//image1 = pokemonToSwap.getImage(player, 1);
-	  			//image2 = pokemonToSwap.getImage(player, 0);
-	  			image1 = "images/v3.gif";
-	  			image2 = "images/v3temp.png";
-	  			image3 = "images/open pokeball.png";
-	  			image4 = "images/pokeball.gif";
-	  			
-		  	}*/
-		  	imagePokemon[index] = new ImageIcon(image1);
+	 
+	  
+	  public void swapAnimation(int loop, int index, String arr[], int curr) {
+		  //	System.out.println(loop);
+		  	imagePokemon[index] = new ImageIcon(arr[curr]);
 		      //JLabel labelPlayerPokemon = new JLabel(imagePlayerPokemon);
 		      labelPokemon[index].setIcon(imagePokemon[index]);
 	    	// Timer timer1;
-	    	 for(int i = 0; i < buttonsMainMenu.length; i++) {
+	    	 /*for(int i = 0; i < buttonsMainMenu.length; i++) {
 	    		 buttonsMainMenu[i].setEnabled(false);
 	    	 }
 	    	 for(int i = 0; i < buttonsSubMenu.length; i++) {
 	    		 buttonsSubMenu[i].setEnabled(false);
-	    	 }
+	    	 }*/
 		   timer1 = new Timer(0, new ActionListener() {
 			   
 	            public void actionPerformed(ActionEvent e) {
-	            
-		    			imagePokemon[index] = new ImageIcon(image2);
-		    		    //JLabel labelOpponentPokemon = new JLabel(imageOpponentPokemon);
-		    		    labelPokemon[index].setIcon(imagePokemon[index]);  
-		    		    timer2 = new Timer(0, new ActionListener() {
-		    				   
-		    	            public void actionPerformed(ActionEvent e) {
-		    	            		imagePokemon[index] = new ImageIcon(image3);
-		    		    		    //JLabel labelOpponentPokemon = new JLabel(imageOpponentPokemon);
-		    		    		    labelPokemon[index].setIcon(imagePokemon[index]);   
-		    		    		    timer3 = new Timer(0, new ActionListener() {
-		 		    				   
-		    		    	            public void actionPerformed(ActionEvent e) {
-		    		    	            	imagePokemon[index] = new ImageIcon(image4);
-		    		    		    		    //JLabel labelOpponentPokemon = new JLabel(imageOpponentPokemon);
-		    		    	            	labelPokemon[index].setIcon(imagePokemon[index]);   
-		    		    	            	if(!selectFirst && index == 0) {
-			    		    		   	    	 for(int i = 0; i < buttonsMainMenu.length; i++) {
-			    		    			    		 buttonsMainMenu[i].setEnabled(true);
-			    		    			    	 }
-		    		    	            	}
-		    		    	            	for(int i = 0; i < buttonsSubMenu.length; i++) {
-		    		    			    		 buttonsSubMenu[i].setEnabled(true);
-		    		    			    	 }
-		    		    		   	    	 //swap = !swap;
-		    		    		   	    	 //option = "swap2";
-		    		    		    		    timer3.stop();
-		    		    		    		    if(loop == 1) {
-		    		    		    		    	swapAnimation(0, 0, image5, image6, image7, image8, "", "", "", "");
-		    		    		    		    }
-		    		    	            }
-		    		    	         });
-		    		    		    timer2.stop();
-		    		    		    timer3.setInitialDelay(100);
-		   		    	    	 timer3.start();
-		    	            }
-		    	         });
-		    		    timer1.stop();
-		    		    timer2.setInitialDelay(100);
-		    	    	timer2.start();
-
-		    	    	
+	            	 timer1.stop();
+	            	if(selectFirst && index == 0) {
+    		   	    	 
+    		   	    	 enableMainMenu(true);
+    		   	    	selectFirst = false;
+	            	}
+	            	
+	            	enableSubMenu(true);
+		   	    	 //swap = !swap;
+		   	    	 //option = "swap2";
+		    		   
+		    		    if(loop > 0) {
+		    		    	swapAnimation(loop-1, index, arr, curr+1);
+		    		    } 
+		    		    else {
+		    		    	if(index == 1) {
+		    		    		Pokemon opponentPokemon = manager.getOSPokemon();
+		    		    		//int osPokemon = manager.getOSPokemon();
+		    		    		pokemonHPBar[index].setValue(opponentPokemon.GetHP());
+		    		    	}
+		    		    	else {
+		    		    		Pokemon playerPokemon = manager.getPSPokemon();
+		    		    		//int psPokemon = manager.getPSPokemon();
+		    		    		pokemonHPBar[index].setValue(playerPokemon.GetHP());
+		    		    	}
+		    		    	String data = manager.getData();
+		      			  	optionData.setText(data);
+		    		    	if(t != 0) {
+								 enableMainMenu(true);
+								 t = 0;
+		    		    	}
+		    		    }
 	            }
 	         });
-		  timer1.setInitialDelay(delay);
+		  timer1.setInitialDelay(100);
 	    	 timer1.start();
 	    	 
-	    	 //Timer timer2;
-	    	 
-
-	/*	} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
 	  }
 	  
 
   }
   
+  
+  
   public Game() {
+	  for(int i = 0; i < subpanels.length; i++) {
+		  subpanels[i] = new JPanel();
+		  if(i == 7) {
+			  subpanels[i].setLayout(new GridLayout(0, 3));
+		  }
+		  else if(i == 8) {
+			  subpanels[i].setLayout(new FlowLayout());
+		  }
+		  else if(i == 9) {
+			  subpanels[i].setLayout(new GridLayout(0, 2));
+		  }
+	  }
 	  
-
+	  
 	  frame.setResizable(false);
 	  frame.setPreferredSize(new Dimension(720, 1000));
       frame.setLayout(new BorderLayout());
       frame.add(lpane, BorderLayout.CENTER);
-      frame.add(panelStart, BorderLayout.CENTER);
+      frame.add(subpanels[0], BorderLayout.CENTER);
+      frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+	  
+	  
       lpane.setBounds(0, -5, 720, 1000);
-      panelStart.setBounds(0, 500, 720, 1000);
-      //panelBlue.setBackground(Color.BLUE);
+      subpanels[0].setBounds(0, 500, 720, 1000);
+
       
-      start.addActionListener(click);
-      start.setBackground(new Color(0xb8ffc6));
-      start.setPreferredSize(new Dimension(170, 100));
-      
-      quit.addActionListener(click);
-      quit.setBackground(new Color(0xb8ffc6));
-      quit.setPreferredSize(new Dimension(170, 100));
-      
-      panelStart.add(start);
-      panelStart.add(quit);
-      
-      
-      
-      
-      
-      
-      
-      
-      ImageIcon background = new ImageIcon("images/pokemon-background-new3.png");
-      JLabel labelBackground = new JLabel(background);
-      labelBackground.setBounds(0, 0, 704, 1000);
-      panelBlue.add(labelBackground);
-      
-      panelBlue.setBounds(0, 0, 704, 1000);
-      panelBlue.setOpaque(true);
-      
-      for(int i = 0; i < labelPokemon.length; i++) {
-    	  labelPokemon[i] = new JLabel();
+      for(int i = 0; i < startButtons.length; i++) {
+    	  startButtons[i].addActionListener(click);
+    	  startButtons[i].setBackground(new Color(0xb8ffc6));
+    	  startButtons[i].setPreferredSize(new Dimension(170, 100));
+    	  subpanels[0].add(startButtons[i]);
       }
-      
-      panelEffect[0] = new JPanel();
-      //JLabel labelPlayerPokemon = new JLabel(imagePlayerPokemon);
-      labelPokemon[2].setIcon(imagePokemon[2]);
-      labelPokemon[2].setBounds(0, 0, 720, 1000);
-      panelEffect[0].add(labelPokemon[2]);
-      panelEffect[0].setBounds(145, 320, 100, 100);
-      panelEffect[0].setOpaque(false);
-      
-      panelEffect[0].setVisible(false);
-      
-      panelEffect[1] = new JPanel();
-      //JLabel labelOpponentPokemon = new JLabel(imageOpponentPokemon);
-      labelPokemon[3].setIcon(imagePokemon[3]);
-      labelPokemon[3].setBounds(0, 0, 720, 1000);
-      panelEffect[1].add(labelPokemon[3]);
-      panelEffect[1].setBounds(485, 110, 100, 100);
-      panelEffect[1].setOpaque(false);
-      
-      panelEffect[1].setVisible(false);
-      
-      //ImageIcon imagePlayerPokemon = new ImageIcon("images/v3.gif");
-      imagePokemon[0] = new ImageIcon("images/pokeball.gif");
-      //JLabel labelPlayerPokemon = new JLabel(imagePlayerPokemon);
-      labelPokemon[0].setIcon(imagePokemon[0]);
-      labelPokemon[0].setBounds(0, 0, 720, 1000);
-      panelGreen.add(labelPokemon[0]);
-      
-      //panelGreen.setBackground(Color.GREEN);
-      panelGreen.setBounds(145, 310, 100, 100);
-      panelGreen.setOpaque(false);
-      
-      
-      //ImageIcon imageOpponentPokemon = new ImageIcon("images/c2.png");
-      imagePokemon[1] = new ImageIcon("images/pokeball.gif");
-      //JLabel labelOpponentPokemon = new JLabel(imageOpponentPokemon);
-      labelPokemon[1].setIcon(imagePokemon[1]);
-      labelPokemon[1].setBounds(0, 0, 720, 1000);
-      panelRed.add(labelPokemon[1]);
-      
-      //panelGreen.setBackground(Color.GREEN);
-      panelRed.setBounds(485, 100, 100, 100);
-      panelRed.setOpaque(false);
-      
-      
-      
-      
-      panelBrown.setLayout(new BoxLayout(panelBrown, BoxLayout.PAGE_AXIS));
+       
+      setupBackground();
+ 
+      setupCurrentPokemon();
+       
+      setupEffects();
+            
+      setupDataSummary();
 
-      panelBrown.setBorder(new LineBorder(Color.BLACK, 2, true));
-      JPanel panelWhite = new JPanel(new FlowLayout());
+      setupBenchData();
       
+      setupMenu();
       
-      JLabel currentname1 = new JLabel("Venusaur");
-      JLabel hp1 = new JLabel("HP");
-      JProgressBar progressbar1 = new JProgressBar(0);
-      progressbar1.setForeground(Color.GREEN.darker());
-      progressbar1.setValue(100);
-      progressbar1.setStringPainted(true);
-      JLabel status1 = new JLabel("Off: 100 Def: 100");
-      
-      panelWhite.add(hp1);
-      panelWhite.add(progressbar1);
-      panelWhite.setOpaque(false);
-      
-      panelBrown.add(currentname1);
-      panelBrown.add(panelWhite);
-      panelBrown.add(status1);
+      setupCurrentPokemonData();
 
-      panelBrown.setBounds(380, 300, 220, 70);
-      panelBrown.setOpaque(true);
-      
-      
-      panelBrown.setBackground(Color.WHITE);
-      
-      panelPink.setLayout(new BoxLayout(panelPink, BoxLayout.PAGE_AXIS));
-      panelPink.setBorder(new LineBorder(Color.BLACK, 2, true));
-      
-      JPanel panelGray = new JPanel(new FlowLayout());
-      
-      JLabel currentname2 = new JLabel("Charizard");
-      JLabel hp2 = new JLabel("HP");
-      JProgressBar progressbar2 = new JProgressBar(0);
-      progressbar2.setForeground(Color.GREEN.darker());
-      progressbar2.setValue(100);
-      progressbar2.setStringPainted(true);
-      JLabel status2 = new JLabel("Off: 100 Def: 100");
-      
-      panelGray.add(hp2);
-      panelGray.add(progressbar2);
-      panelGray.setOpaque(false);
-      
-      panelPink.add(currentname2);
-      panelPink.add(panelGray);
-      panelPink.add(status2);
+      subpanels[10].setBounds(0, 450, 704, 516);
+      subpanels[10].setBorder(new LineBorder(Color.BLACK, 2, true));
+      subpanels[10].setOpaque(false);
 
-      panelPink.setBounds(170, 100, 220, 70);
-      panelPink.setOpaque(true);
-      
-      
-      panelPink.setBackground(Color.WHITE);
-      
-
-      for(int i = 0; i < panelPokemonData.length; i++) {
-    	  panelPokemonData[i] = new JPanel();
-    	  labelPokemonData[i] = new JLabel("<html>First Pokemon<br>HP: 100<br>Def: 100 Off: 100</html>");
-    	  panelPokemonData[i].setLayout(new BoxLayout(panelPokemonData[i], BoxLayout.PAGE_AXIS));
-    	  labelPokemonData[i].setIcon(new ImageIcon("images/c3.png"));
-    	  labelPokemonData[i].setOpaque(false);
-          panelPokemonData[i].add(labelPokemonData[i]);
-    	  panelPurple.add(labelPokemonData[i]);
+      for(int i = 1; i < subpanels.length; i++) {
+    	  lpane.add(subpanels[i], i-1, 0);
       }
-      
 
-      panelPurple.setBounds(10, 500, 704, 150);
-      //panelPurple.setAlignmentX(Component.CENTER_ALIGNMENT);
-      panelPurple.setOpaque(true);
-      
-      
-      for(int i = 0; i < buttonsMainMenu.length; i++) {
-    	  buttonsMainMenu[i].setBackground(new Color(0xb8ffc6));
-    	  buttonsMainMenu[i].addActionListener(click);
-    	  buttonsMainMenu[i].setPreferredSize(new Dimension(170, 100));
-    	  panelOrange.add(buttonsMainMenu[i]);
-      }
-      
-      
-      panelOrange.setBounds(-8, 650, 720, 1000);
-      panelOrange.setOpaque(true);
-      
-      
-      for(int i = 0; i < buttonsSubMenu.length; i++) {
-    	  buttonsSubMenu[i] = new JButton(" ");
-    	  buttonsSubMenu[i].setBackground(new Color(0xb8ffc6));
-    	  buttonsSubMenu[i].addActionListener(click);
-    	  buttonsSubMenu[i].setPreferredSize(new Dimension(90, 100));
-    	  panelYellow.add(buttonsSubMenu[i]);
-      }
-      
-
-      
-      panelYellow.setBounds(5, 770, 695, 150);
-      panelYellow.setOpaque(true);
-      panelYellow.setVisible(false);
-      
-
-      
-      lpane.add(panelBlue, 0, 0);
-      lpane.add(panelGreen, 1, 0);
-      lpane.add(panelRed, 2, 0);
-      lpane.add(panelPurple, 3, 0);
-      lpane.add(panelOrange, 4, 0);
-      lpane.add(panelYellow, 5, 0);
-      lpane.add(panelBrown, 3, 0);
-      lpane.add(panelPink, 3, 0);
-      lpane.add(panelMenu, 5, 0);
-      lpane.add(panelData, 4, 0);
-      lpane.add(panelEffect[0], 5, 0);
-      lpane.add(panelEffect[1], 5, 0);
-      
-      panelData.add(optionData);
-      panelData.setBounds(0, 450, 704, 50);
-      panelData.setBackground(Color.WHITE);
-      panelData.setBorder(new LineBorder(Color.BLACK, 2, true));
-      
-      panelMenu.setBounds(0, 450, 704, 516);
-      panelMenu.setBorder(new LineBorder(Color.BLACK, 2, true));
-      panelMenu.setOpaque(false);
-      
       lpane.setVisible(false);
-      panelStart.setVisible(true);
+      subpanels[0].setVisible(true);
       
       frame.pack();
       frame.setVisible(true);
 
       
-    /*  try {
-		  for(int i = 0; i < buttonsMainMenu.length; i++) {
-			  buttonsMainMenu[i].setEnabled(false);
-		  }
-		Thread.sleep(2500);
-		imageOpponentPokemon = new ImageIcon("images/open pokeball.png");
-	    //JLabel labelOpponentPokemon = new JLabel(imageOpponentPokemon);
-	    labelOpponentPokemon.setIcon(imageOpponentPokemon);
-	    Thread.sleep(100);
-	    imageOpponentPokemon = new ImageIcon("images/c2temp.png");
-	    //JLabel labelOpponentPokemon = new JLabel(imageOpponentPokemon);
-	    labelOpponentPokemon.setIcon(imageOpponentPokemon);
-	    Thread.sleep(100);
-	    imageOpponentPokemon = new ImageIcon("images/c2.png");
-	    //JLabel labelOpponentPokemon = new JLabel(imageOpponentPokemon);
-	    labelOpponentPokemon.setIcon(imageOpponentPokemon);
-	    displayPokemon();
+  }
+  
+  private void setupBackground() {
+	  ImageIcon background = new ImageIcon("images/pokemon-background-new3.png");
+      JLabel labelBackground = new JLabel(background);
+      labelBackground.setBounds(0, 0, 704, 1000);
+      subpanels[1].add(labelBackground);
+      
+      subpanels[1].setBounds(0, 0, 704, 1000);
+      subpanels[1].setOpaque(true);
+      
+      for(int i = 0; i < labelPokemon.length; i++) {
+    	  labelPokemon[i] = new JLabel();
+      }
+  }
+  
+  private void setupCurrentPokemon() {
+	  for(int i = 0; i < imagePokemon.length-2; i++) {
+		  imagePokemon[i] = new ImageIcon("images/pokeball.gif");
+	      labelPokemon[i].setIcon(imagePokemon[0]);
+	      labelPokemon[i].setBounds(0, 0, 720, 1000);
+	      subpanels[i+2].add(labelPokemon[i]);
+	      subpanels[i+2].setOpaque(false);
+	  }
+     
+      subpanels[2].setBounds(145, 310, 100, 100);
+      subpanels[3].setBounds(485, 100, 100, 100);
 
-	} catch (InterruptedException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}*/
+  }
+  
+  private void setupEffects() {
+
+      labelPokemon[2].setIcon(imagePokemon[2]);
+      labelPokemon[2].setBounds(0, 0, 720, 1000);
+      subpanels[4].add(labelPokemon[2]);
+      subpanels[4].setBounds(145, 320, 100, 100);
+      subpanels[4].setOpaque(false);
+      subpanels[4].setVisible(false);
+      
+
+      labelPokemon[3].setIcon(imagePokemon[3]);
+      labelPokemon[3].setBounds(0, 0, 720, 1000);
+      subpanels[5].add(labelPokemon[3]);
+      subpanels[5].setBounds(485, 110, 100, 100);
+      subpanels[5].setOpaque(false);
+      
+      subpanels[5].setVisible(false);
+  }
+  
+  private void setupDataSummary() {
+	  subpanels[6].add(optionData);
+      subpanels[6].setBounds(0, 450, 704, 50);
+      subpanels[6].setBackground(Color.WHITE);
+      subpanels[6].setBorder(new LineBorder(Color.BLACK, 2, true));
+  }
+  
+  private void setupBenchData() {
+      subpanels[7].setBounds(10, 500, 704, 100);
+      subpanels[7].setOpaque(true);
+      for(int i = 0; i < labelPokemonData.length; i++) {
+    	 // panelPokemonData[i] = new JPanel();
+    	  labelPokemonData[i] = new JLabel("<html>First Pokemon<br>HP: 100<br>Def: 100 Off: 100</html>");
+    	//  panelPokemonData[i].setLayout(new BoxLayout(panelPokemonData[i], BoxLayout.PAGE_AXIS));
+    	  labelPokemonData[i].setIcon(new ImageIcon("images/c3.png"));
+    	  labelPokemonData[i].setOpaque(false);
+        //  panelPokemonData[i].add(labelPokemonData[i]);
+          subpanels[7].add(labelPokemonData[i]);
+      }
+  }
+  
+  private void setupMenu() {
+      subpanels[8].setBounds(-8, 600, 720, 1000);
+      subpanels[8].setOpaque(true);
+      for(int i = 0; i < buttonsMainMenu.length; i++) {
+    	  buttonsMainMenu[i].setBackground(new Color(0xb8ffc6));
+    	  buttonsMainMenu[i].addActionListener(click);
+    	  buttonsMainMenu[i].setPreferredSize(new Dimension(170, 100));
+    	  buttonsMainMenu[i].setEnabled(false);
+    	  subpanels[8].add(buttonsMainMenu[i]);
+      }
       
       
+      subpanels[9].setBounds(5, 740, 695, 200);
+      subpanels[9].setOpaque(true);
+      subpanels[9].setVisible(false);
+      for(int i = 0; i < buttonsSubMenu.length; i++) {
+    	  buttonsSubMenu[i] = new JButton(" ");
+    	  buttonsSubMenu[i].setBackground(new Color(0xb8ffc6));
+    	  buttonsSubMenu[i].addActionListener(click);
+    	  buttonsSubMenu[i].setPreferredSize(new Dimension(90, 150));
+    	  buttonsSubMenu[i].setEnabled(false);
+    	  buttonsSubMenu[i].setVisible(false);
+    	  subpanels[9].add(buttonsSubMenu[i]);
+      }
+  }
+  
+  private void setupCurrentPokemonData() {
+	  
+	  JPanel panelCurrentPokemonData[] = new JPanel[2];
+      
+	  for(int i = 0; i < panelCurrentPokemonData.length; i++) {
+		  subpanels[11+i].setLayout(new BoxLayout(subpanels[11+i], BoxLayout.PAGE_AXIS));
+		  panelCurrentPokemonData[i] = new JPanel(new FlowLayout());
+    	  pokemonHPBar[i] = new JProgressBar(0);
+    	  pokemonHPBar[i].setForeground(Color.GREEN.darker());
+    	  pokemonHPBar[i].setValue(100);
+    	  pokemonHPBar[i].setStringPainted(true);
+    	  
+    	  JLabel hp = new JLabel("HP");
+    	  currentPokemonName[i] = new JLabel("-");
+    	  currentPokemonStats[i] = new JLabel("Off: - Def: -");
+    	  panelCurrentPokemonData[i].add(hp);
+    	  panelCurrentPokemonData[i].add(pokemonHPBar[i]);
+    	  panelCurrentPokemonData[i].setOpaque(false);
+    	  subpanels[i+11].add(currentPokemonName[i]);
+    	  subpanels[i+11].add(currentPokemonStats[i]);
+    	  subpanels[i+11].add(panelCurrentPokemonData[i]);
+    	  subpanels[i+11].setOpaque(true);
+          subpanels[i+11].setBackground(Color.WHITE);
+          subpanels[i+11].setBorder(new LineBorder(Color.BLACK, 2, true));
+      }
+      
+      subpanels[11].setBounds(380, 300, 220, 70);
+      subpanels[12].setBounds(170, 100, 220, 70);
+
   }
   
   public void reset() {
-	  panelStart.setVisible(true);
+	  subpanels[0].setVisible(true);
 	  lpane.setVisible(false);
-	  panelYellow.setVisible(false);
+	  subpanels[9].setVisible(false);
 	  
 	  optionData.setText("");
 	  
@@ -640,49 +690,98 @@ private int t = 1;
 	  imagePokemon[1] = new ImageIcon("images/pokeball.gif");
 	  //JLabel labelOpponentPokemon = new JLabel(imageOpponentPokemon);
 	  labelPokemon[1].setIcon(imagePokemon[1]);  
+	  
+	  for(int i = 0; i < currentPokemonName.length; i++) {
+		  currentPokemonName[i].setText("-");
+    	  currentPokemonStats[i].setText("Off: - Def: -");
+    	  pokemonHPBar[i].setValue(100);
+    	  optionData.setText("");
+	  }
+	  
+	  enableMainMenu(false);
   }
   
   public void setButtons() {
-	  int index = manager.getPSPokemon();
+	  Pokemon playerPokemon = manager.getPSPokemon();
 	  if(option.equals("attack")) {
-		  Attack attacks[] = manager.getPlayerPokemon()[index].getAttacks();
+		  Attack attacks[] = playerPokemon.getAttacks();
 		  for(int i = 0; i < attacks.length; i++) {
+			  buttonsSubMenu[i].setVisible(true);
+			  buttonsSubMenu[i].setEnabled(true);
 			  buttonsSubMenu[i].setText(attacks[i].getName());
 		  }
-		  buttonsSubMenu[index].setEnabled(true);
+		  buttonsSubMenu[playerPokemon.getIndex()].setEnabled(true);
 	  }
 	  else if(option.equals("swap")) {
 		  Pokemon pokemon[] = manager.getPlayerPokemon();
 		  for(int i = 0; i < pokemon.length; i++) {
+			  buttonsSubMenu[i].setVisible(true);
 			  buttonsSubMenu[i].setText(pokemon[i].getName());
+			  if(pokemon[i].isFainted()) {
+				  buttonsSubMenu[i].setEnabled(false);
+			  }
 		  }
-		  buttonsSubMenu[index].setEnabled(false);
+		  for(int i = pokemon.length; i < buttonsSubMenu.length; i++) {
+			  buttonsSubMenu[i].setVisible(false);
+		  }
+		  buttonsSubMenu[playerPokemon.getIndex()].setEnabled(false);
 	  }
 	  else if(option.equals("useItem")) {
 		  Item items[] = manager.getPlayerItems();
 		  for(int i = 0; i < items.length; i++) {
+			  buttonsSubMenu[i].setVisible(true);
+			  buttonsSubMenu[i].setEnabled(true);
 			  buttonsSubMenu[i].setText(items[i].getName());
 		  }
-		  buttonsSubMenu[index].setEnabled(true);
+		  buttonsSubMenu[playerPokemon.getIndex()].setEnabled(true);
 	  }
 	  else if(option.equals("surrender")) {
 		  buttonsSubMenu[0].setText("Confirm");
 		  buttonsSubMenu[1].setText("Cancel");
-		  buttonsSubMenu[index].setEnabled(true);
+		  buttonsSubMenu[0].setEnabled(true);
+		  buttonsSubMenu[1].setEnabled(true);
+		  for(int i = 2; i < buttonsSubMenu.length; i++) {
+			  buttonsSubMenu[i].setVisible(false);
+		  }
+	  }
+	  else if(option.equals("endGame")) {
+		  subpanels[9].setVisible(true);
+		  buttonsSubMenu[0].setText("Main Menu");
+		  buttonsSubMenu[1].setText("Quit");
+		  //buttonsSubMenu[index].setEnabled(true);
+		  for(int i = 0; i < buttonsMainMenu.length; i++) {
+			  buttonsMainMenu[i].setEnabled(false);
+		  }
+		  buttonsSubMenu[0].setEnabled(true);
+		  buttonsSubMenu[1].setEnabled(true);
+		  for(int i = 2; i < buttonsSubMenu.length; i++) {
+			  buttonsSubMenu[i].setVisible(false);
+		  }
 	  }
   }
   
 
   public void displayPokemon() {
 	  	Pokemon playerPokemon[] = manager.getPlayerPokemon();
-		  panelYellow.setVisible(true);
+	  	subpanels[9].setVisible(true);
 
-		  for(int i = 0; i < buttonsSubMenu.length; i++) {
+		  for(int i = 0; i < playerPokemon.length; i++) {
 			  buttonsSubMenu[i].setVisible(true);
 			  buttonsSubMenu[i].setText(playerPokemon[i].getName());
 		  }
 
 }
+  public void enableMainMenu(boolean enable) {
+	  for(int i = 0; i < buttonsMainMenu.length; i++) {
+    		 buttonsMainMenu[i].setEnabled(enable);
+    	 }
+  }
+  
+  public void enableSubMenu(boolean enable) {
+	  for(int i = 0; i < buttonsSubMenu.length; i++) {
+    		 buttonsSubMenu[i].setEnabled(enable);
+    	 }
+  }
   
 
 }

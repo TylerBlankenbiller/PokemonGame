@@ -22,7 +22,7 @@ public class Attack
       if(AttackName.equalsIgnoreCase("Double-Edge")){
           setStats(new int[]{20, 40}, new int[]{0, 0}, new String[]{"Opponent", "User"});
       }
-      else if(AttackName.equalsIgnoreCase("Syntgesis")){
+      else if(AttackName.equalsIgnoreCase("Synthesis")){
           setStats(new int[]{-50}, new int[]{0}, new String[]{"User"});
       }
       else if(AttackName.equalsIgnoreCase("Seed Bomb")){
@@ -44,7 +44,7 @@ public class Attack
           setStats(new int[]{60, 0}, new int[]{0, -1}, new String[]{"Opponent", "OpponentOffense"});
       }
       else{
-          System.out.println("Sorry we don't support that Move");
+          System.out.println("Sorry we don't support that Move ");
          // return null;
       }
   }
@@ -54,7 +54,8 @@ public class Attack
   }
   
   public float applyAttack(Pokemon target){
-      return 0;
+	  float damage = target.SetHP(25, 10);
+      return damage;
   }
   
   public String getName(){

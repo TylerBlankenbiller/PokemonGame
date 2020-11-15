@@ -10,7 +10,7 @@ public class Manager{
     // Player data
     private Pokemon playerSet[];
     // Player selected pokemon
-    private int psPokemon = 0;
+    private int psPokemon;
     private Item playerItems[]; 
     
     // Opponent data
@@ -19,10 +19,10 @@ public class Manager{
     private int osPokemon = 0;
     private Item opponentItems[]; 
     
-    private float damageApplied = 0;
+    private float damageApplied;
     // Round data
     
-    private String data = "";
+    private String data;
     
     public Manager(){
         this.playerTurn = 0;
@@ -30,17 +30,21 @@ public class Manager{
     }
 
     public void initializeBattle(){
+    	psPokemon = 0;
+    	osPokemon = 0;
+    	damageApplied = 0;
+    	data = "";
         // Generate Player's bench
-        this.playerSet = new Pokemon[6];
+        this.playerSet = new Pokemon[3];
         for(int i = 0; i < playerSet.length; i++){
-            this.playerSet[i] = new Pokemon("Venusaur");
+            this.playerSet[i] = new Pokemon("Venusaur", i);
         }
         //setPlayerBench(playerSet);
         
         // Generate opponent's pokemon
         this.opponentSet = new Pokemon[3];
         for(int i = 0; i < opponentSet.length; i++){
-            this.opponentSet[i] = new Pokemon("Venusaur");
+            this.opponentSet[i] = new Pokemon("Venusaur", i);
         }
         //setOpponentBench(opponentSet);
         
@@ -64,7 +68,7 @@ public class Manager{
         }
         // Player loses if all pokemon fainted
         if(numFainted == this.playerSet.length){
-            this.winner = "opponent";
+            this.winner = "Opponent";
         }
         else{
             numFainted = 0;
@@ -76,11 +80,11 @@ public class Manager{
             }
             // Player wins
             if(numFainted == this.opponentSet.length){
-                this.winner = "player";
+                this.winner = "Player";
             }
         }
         // Reset battle if there is a winner
-        if(winner != "") {
+        if(this.winner != "") {
             resetBattle();
             return true;
         }
@@ -106,6 +110,9 @@ public class Manager{
                                         + this.damageApplied + " damage to " 
                                         + opponentSet[osPokemon].getName() 
                                         + " (Opponent).";
+                    if(opponentSet[osPokemon].GetHP() <= 0) {
+                    	data += " " + opponentSet[osPokemon].getName() + " has fainted!";
+                    }
                 }
                 else{
                     this.damageApplied = opponentSet[osPokemon]
@@ -113,10 +120,13 @@ public class Manager{
                                     .applyAttack(playerSet[psPokemon]);
                     data = opponentSet[osPokemon].getName() 
                                         + " (Opponent) has used " + opponentSet[osPokemon]
-                                                .getAttacks()[subMenuOption-1].getName() + " applied " 
+                                                .getAttacks()[subMenuOption-1].getName() + " and applied " 
                                         + this.damageApplied + " damage to " 
                                         + playerSet[psPokemon].getName() 
                                         + " (Player).";
+                    if(playerSet[psPokemon].GetHP() <= 0) {
+                    	data += " " + playerSet[psPokemon].getName() + " has fainted!";
+                    }
                 }
                 break;
             case 3: // Item
@@ -132,7 +142,7 @@ public class Manager{
                     opponentItems[subMenuOption-1].applyItem(opponentSet[osPokemon]);
                     data = "Opponent has used " 
                                         + opponentItems[subMenuOption-1].getName() 
-                                        + " on " + opponentSet[psPokemon].getName() 
+                                        + " on " + opponentSet[osPokemon].getName() 
                                         + ".";
                 }
                 break;
@@ -166,17 +176,28 @@ public class Manager{
         Random rand = new Random(); 
         // Choose random number for menu item (either attack, use item, swap)
         int menuOption = rand.nextInt(3) + 1;
-        while(menuOption == 2){
-            menuOption = rand.nextInt(3) + 1;
-        }
         int subMenuOption = 0;
+        if(opponentSet[osPokemon].GetHP() <= 0) {
+        	menuOption = 4;
+        	subMenuOption = rand.nextInt(3) + 1;
+        	while(opponentSet[subMenuOption - 1].isFainted()) {
+        		subMenuOption = rand.nextInt(3) + 1;
+        	}
+        }
+        else {
+	        while(menuOption == 2){
+	            menuOption = rand.nextInt(3) + 1;
+	        }
+	        if(menuOption == 1 || menuOption == 3){
+	            subMenuOption = rand.nextInt(4) + 1;
+	        }
+	        else{
+	            subMenuOption = rand.nextInt(3) + 1;
+	        }
+	        
+        }
+        
         // Choose random number for sub menu options depending on menu option
-        if(menuOption == 1 || menuOption == 3){
-            subMenuOption = rand.nextInt(4) + 1;
-        }
-        else{
-            subMenuOption = rand.nextInt(3) + 1;
-        }
         
        // System.out.println(menuOption + " " + subMenuOption);
         // Process CPU turn
@@ -190,8 +211,17 @@ public class Manager{
         return this.playerSet;
     }
     
-    public int getPSPokemon(){
-        return this.psPokemon;
+    public Pokemon[] getOpponentPokemon(){
+        return this.opponentSet;
+    }
+    
+    
+    public Pokemon getPSPokemon(){
+        return this.playerSet[this.psPokemon];
+    }
+    
+    public Pokemon getOSPokemon(){
+        return this.opponentSet[this.osPokemon];
     }
     
     public Pokemon setPSPokemon(int selection){
@@ -230,5 +260,9 @@ public class Manager{
     public void surrender(){
         this.winner = "opponent";
         resetBattle();    
+    }
+    
+    public int getNumPlayerPokemon() {
+    	return this.playerSet.length;
     }
 }

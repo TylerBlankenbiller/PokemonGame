@@ -6,6 +6,7 @@ import java.lang.Math;
 public class Pokemon
 {
   private String name;
+  private int index;
   private int HP;
   private float OffenseStatus;
   private float DefenseStatus;
@@ -21,54 +22,55 @@ public class Pokemon
       PokemonName - Name of Pokemon Object to create
       Creates specific Pokemon Object based on string arugment
   */
-  public Pokemon(String PokemonName){
+  public Pokemon(String PokemonName, int index){
     /*  if(PokemonName == null){
           System.out.println("Please Specify a Pokemon");
           return null;
       }*/
       this.name = PokemonName;
+      this.index = index;
       if(PokemonName.equalsIgnoreCase("Venusaur")){
           String[] pokemonAttacks = {"Double-Edge", "Synthesis", "Seed Bomb", "Growth"};
-          setStats(50, 6, 6, "Grass", pokemonAttacks);
+          setStats(100, 6, 6, "Grass", pokemonAttacks);
       }
       else if(PokemonName.equalsIgnoreCase("Charizard")){
           String[] pokemonAttacks = {};
-          setStats(50, 7, 5, "Fire", pokemonAttacks);
+          setStats(100, 7, 5, "Fire", pokemonAttacks);
       }
       else if(PokemonName.equalsIgnoreCase("Blastoise")){
           String[] pokemonAttacks = {""};
-          setStats(50, 5, 7, "Water", pokemonAttacks);
+          setStats(100, 5, 7, "Water", pokemonAttacks);
       }
       else if(PokemonName.equalsIgnoreCase("Butterfree")){
           String[] pokemonAttacks = {""};
-          setStats(40, 6, 5, "Bug", pokemonAttacks);
+          setStats(100, 6, 5, "Bug", pokemonAttacks);
       }
       else if(PokemonName.equalsIgnoreCase("Beedrill")){
           String[] pokemonAttacks = {""};
-          setStats(40, 6, 5, "Bug", pokemonAttacks);
+          setStats(100, 6, 5, "Bug", pokemonAttacks);
       }
       else if(PokemonName.equalsIgnoreCase("Pidgeot")){
           String[] pokemonAttacks = {""};
-          setStats(50, 5, 5, "Flying", pokemonAttacks);
+          setStats(100, 5, 5, "Flying", pokemonAttacks);
       }
       else if(PokemonName.equalsIgnoreCase("Raticate")){
           String[] pokemonAttacks = {""};
-          setStats(40, 5, 5, "Normal", pokemonAttacks);
+          setStats(100, 5, 5, "Normal", pokemonAttacks);
       }
       else if(PokemonName.equalsIgnoreCase("Fearow")){
           String[] pokemonAttacks = {""};
-          setStats(40, 6, 4, "Flying", pokemonAttacks);
+          setStats(100, 6, 4, "Flying", pokemonAttacks);
       }
       else if(PokemonName.equalsIgnoreCase("Arbok")){
           String[] pokemonAttacks = {""};
-          setStats(40, 6, 5, "Poison", pokemonAttacks);
+          setStats(100, 6, 5, "Poison", pokemonAttacks);
       }
       else if(PokemonName.equalsIgnoreCase("Pikachu")){
           String[] pokemonAttacks = {""};
-          setStats(40, 6, 5, "Electric", pokemonAttacks);
+          setStats(100, 6, 5, "Electric", pokemonAttacks);
       }
       else{
-          System.out.println("Sorry we don't support that Pokemon");
+       //   System.out.println("Sorry we don't support that Pokemon");
         //  return null;
       }
   }
@@ -134,6 +136,10 @@ public class Pokemon
   
   public String getName(){
       return this.name;
+  }
+  
+  public int getIndex() {
+	  return this.index;
   }
   
 }
