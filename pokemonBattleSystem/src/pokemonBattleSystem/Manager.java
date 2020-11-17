@@ -388,4 +388,15 @@ public class Manager{
 		  
 		 
     }
+	
+    /**********************************************************
+	  Function name: getPlayerTurn
+	  Description: Gets current player's turn
+	  Parameters: None
+	  Return value: Integer indicating the current player's 
+	  				turn
+	 **********************************************************/
+    public int getPlayerTurn() {
+    	return this.playerTurn;
+    }
 }
