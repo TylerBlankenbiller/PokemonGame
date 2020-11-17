@@ -225,13 +225,13 @@ public class Game extends JFrame {
 		  // Do swap animation for opponent
 		  swapAnimation(3, 1, opponentImages, 0);
 		  // Display Pokemon data in bench
-    	  for(int i = 0; i < playerPokemon.length; i++) {
-    		  labelBenchPokemonData[i].setText("<html>" + playerPokemon[i].getName() 
+    	  	  for(int i = 0; i < playerPokemon.length; i++) {
+    		  	labelBenchPokemonData[i].setText("<html>" + playerPokemon[i].getName() 
     				  					+ "<br>HP: " + playerPokemon[i].getHP() 
     				  					+ "<br>Def: " + playerPokemon[i].getDefenseStatus() 
     				  					+ " Off: " + playerPokemon[i].getOffenseStatus() + "</html>");
-    		  labelBenchPokemonData[i].setIcon(new ImageIcon(playerPokemon[i].getIcon()));
-    	  }
+    		  	labelBenchPokemonData[i].setIcon(new ImageIcon(playerPokemon[i].getIcon()));
+    	  	 }
 	  }
 	  
 	 /**********************************************************
@@ -306,15 +306,15 @@ public class Game extends JFrame {
 	  public void processSwap(ActionEvent e) {
 		  // Check which Pokemon has been selected to swap to
 		  for(int i = 0; i < buttonsSubMenu.length; i++) {
-			  if(e.getSource() == buttonsSubMenu[i]) {
-                  buttonsSubMenu[i].setEnabled(true);
+			if(e.getSource() == buttonsSubMenu[i]) {
+                  		  buttonsSubMenu[i].setEnabled(true);
 				  // Process player's turn based on main menu and sub menu options
 				  manager.processTurn(option, i);
 				  // Get swap images for player selected Pokemon
 				  String playerImages[] = manager.getSwapImages();
 				  // Do swap animation for player
 				  swapAnimation(7, 0, playerImages, 0);
-                  Pokemon playerPokemon = manager.getPSPokemon();
+                  		  Pokemon playerPokemon = manager.getPSPokemon();
 				  // Display data summary after processing player's turn
 				  String data = manager.getData();
 				  dataSummary.setText(data);
@@ -323,12 +323,12 @@ public class Game extends JFrame {
 					  // Process opponent's turn
 					  completeRound();
 				  }
-                  currentPokemonName[0].setText(playerPokemon.getName());
-                  currentPokemonStats[0].setText("Off: " + playerPokemon.getOffenseStatus() 
+                  		  currentPokemonName[0].setText(playerPokemon.getName());
+                  		  currentPokemonStats[0].setText("Off: " + playerPokemon.getOffenseStatus() 
                                                 + " Def: " + playerPokemon.getDefenseStatus());
 				  break;
-			  }
-		  }
+			}
+		}
 	  }
 	  
 	 /**********************************************************
@@ -352,7 +352,11 @@ public class Game extends JFrame {
 				  dataSummary.setText(data);
 				  // Update opponent's HP bar
 				  Pokemon opponentPokemon = manager.getOSPokemon();
-				  pokemonHPBar[1].setValue(opponentPokemon.getHP());
+				  pokemonHPBar[1].setValue(Math.round(opponentPokemon.getHP()*100/opponentPokemon.getMaxHP()));
+				  // Update current Pokemon data
+				  currentPokemonName[1].setText(opponentPokemon.getName());
+		    	  currentPokemonStats[1].setText("Off: " + opponentPokemon.getOffenseStatus() 
+		    	  							   + " Def: " + opponentPokemon.getDefenseStatus());
 				  // Reset option
 				  option = -1;
 				  // Check if there is a winner after processing player's turn
@@ -371,9 +375,9 @@ public class Game extends JFrame {
 					  swapAnimation(7, 1, opponentImages, 0);
 					  // Update current Pokemon data
 					  currentPokemonName[1].setText(opponentPokemon.getName());
-    		    	  currentPokemonStats[1].setText("Off: " + opponentPokemon.getOffenseStatus() 
+    		    	  		  currentPokemonStats[1].setText("Off: " + opponentPokemon.getOffenseStatus() 
     		    	  							   + " Def: " + opponentPokemon.getDefenseStatus());
-    		    	  // Process opponent's turn after swapping
+    		    	 		  // Process opponent's turn after swapping
 					  completeRound();
 					  break;
 				  }
@@ -413,15 +417,15 @@ public class Game extends JFrame {
 				  // Update current player Pokemon data
 				  currentPokemonStats[0].setText("Off: " + playerPokemon.getOffenseStatus() 
 				  							   + " Def: " + playerPokemon.getDefenseStatus());
-			      pokemonHPBar[0].setValue(playerPokemon.getHP());
-			      // Display data summary after processing player's turn
-				  String data = manager.getData();
-      			  dataSummary.setText(data);
-      			  // Process opponent's turn
-				  completeRound();
-				  break;
+			      	 pokemonHPBar[0].setValue(Math.round(playerPokemon.getHP()*100/playerPokemon.getMaxHP()));
+			      	 // Display data summary after processing player's turn
+				 String data = manager.getData();
+      			  	 dataSummary.setText(data);
+      			  	 // Process opponent's turn
+				 completeRound();
+				 break;
 			  }
-		  }
+		 }
 	  }
 	  
 	 /**********************************************************
@@ -487,20 +491,20 @@ public class Game extends JFrame {
 				  int opponentOption = manager.processCPUTurn();
 				  // Opponent selected attack
 				  if(opponentOption == 0) {
-	        		  // Do effect animation for attack
-	        		  effectAnimation(0, "images/damage.png", "sound/emerald_000D.wav");
-	        	  }
+	        		  	// Do effect animation for attack
+	        		  	effectAnimation(0, "images/damage.png", "sound/emerald_000D.wav");
+	        	  	  }
 				  // Opponent selected use item
-	        	  else if (opponentOption == 2){
-	        		  // Get opponent selected Pokemon
-	        		  Pokemon opponentPokemon = manager.getOSPokemon();
-	        		  // Do effect animation use item
-	        		  effectAnimation(1, "images/item.png", "sound/emerald_000F.wav");
-	        		  // Update current opponent Pokemon data
-	        		  pokemonHPBar[1].setValue(opponentPokemon.getHP());
-	  		    	  currentPokemonStats[1].setText("Off: " + opponentPokemon.getOffenseStatus() 
+	        	  	 else if (opponentOption == 2){
+	        		  	// Get opponent selected Pokemon
+	        		 	 Pokemon opponentPokemon = manager.getOSPokemon();
+	        		 	 // Do effect animation use item
+	        		 	 effectAnimation(1, "images/item.png", "sound/emerald_000F.wav");
+	        		 	 // Update current opponent Pokemon data
+	        		 	 pokemonHPBar[1].setValue(Math.round(opponentPokemon.getHP()*100/opponentPokemon.getMaxHP()));
+	  		    	  	currentPokemonStats[1].setText("Off: " + opponentPokemon.getOffenseStatus() 
 	  		    	  							   + " Def: " + opponentPokemon.getDefenseStatus());
-	        	  }
+	        	  	}
 				  // Display data summary
 				  String data = manager.getData();
 				  dataSummary.setText(data);
@@ -530,18 +534,18 @@ public class Game extends JFrame {
   					+ "<br>HP: " + pokemonHPLabel
   					+ "<br>Def: " + playerPokemon.getDefenseStatus() 
   					+ " Off: " + playerPokemon.getOffenseStatus() + "</html>");
-	      			  pokemonHPBar[0].setValue(playerPokemon.getHP());
-	      		  // Stop timer
-	      		  timerCompleteRound.stop();
-	      		  // Player needs to swap Pokemon
-	      		  if(needToSwap == 1) {
-	      			  // Set option to swap
-	      			  option = 1;
-	      			  // Disable main menu
-	      			  enableMainMenu(false);
-	      			  setButtons();
-	      			  subpanels[9].setVisible(true);
-	      		  }
+	      			  pokemonHPBar[0].setValue(Math.round(playerPokemon.getHP()*100/playerPokemon.getMaxHP()));
+	      		  	// Stop timer
+	      		  	timerCompleteRound.stop();
+	      		  	// Player needs to swap Pokemon
+	      		  	if(needToSwap == 1) {
+	      				  // Set option to swap
+	      				  option = 1;
+	      			 	 // Disable main menu
+	      			 	 enableMainMenu(false);
+	      			 	 setButtons();
+	      			 	 subpanels[9].setVisible(true);
+	      		  	}
 			  }
 		  });
 		  // Set delay
@@ -587,9 +591,9 @@ public class Game extends JFrame {
 		timerEffect = new Timer(0, new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				subpanels[4+index].setVisible(false);
-	            timerEffect.stop();
-	        }
-	    });
+	            		timerEffect.stop();
+	        	}
+	    	});
 		// Set delay
 		timerEffect.setInitialDelay(300);
 		// Start timer
@@ -612,39 +616,39 @@ public class Game extends JFrame {
 		  labelPokemon[player].setIcon(new ImageIcon(images[currIndex]));
 		  // Wait 100 ms to recursively call swapAnimation and update selected Pokemon data
 		   timerSwap = new Timer(0, new ActionListener() {
-	            public void actionPerformed(ActionEvent e) {
-	            	timerSwap.stop();
-	            	// Player has selected their first Pokemon to battle with
-	            	if(selectFirst && player == 0) {
-    		   	    	 enableMainMenu(true);
-    		   	    	 selectFirst = false;
-	            	}
-	            	enableSubMenu(true);
-	            	// Call swapAnimation
-	            	if(loop > 0) {
-		    		    	swapAnimation(loop-1, player, images, currIndex+1);
+	            	public void actionPerformed(ActionEvent e) {
+	            		timerSwap.stop();
+	            		// Player has selected their first Pokemon to battle with
+	            		if(selectFirst && player == 0) {
+    		   	    		 enableMainMenu(true);
+    		   	    		 selectFirst = false;
+	            		}
+	            		enableSubMenu(true);
+	            		// Call swapAnimation
+	            		if(loop > 0) {
+		    			swapAnimation(loop-1, player, images, currIndex+1);
 		    		}
-	            	// Done looping
+	            		// Done looping
 		    		else {
 		    			Pokemon selectedPokemon;
 		    			if(player == 1) {
-		    		    	selectedPokemon = manager.getOSPokemon();
-		    		    }
-		    		    else {
-		    		    	selectedPokemon = manager.getPSPokemon();
-		    		    }
+		    		    		selectedPokemon = manager.getOSPokemon();
+		    			}
+		    			else {
+		    		    		selectedPokemon = manager.getPSPokemon();
+		    			}
 		    			// Update current Pokemon data
-		    		    currentPokemonName[player].setText(selectedPokemon.getName());
-		    		    currentPokemonStats[player].setText("Off: " + selectedPokemon.getOffenseStatus() 
+		    			currentPokemonName[player].setText(selectedPokemon.getName());
+		    			currentPokemonStats[player].setText("Off: " + selectedPokemon.getOffenseStatus() 
 		    		    	  							   + " Def: " + selectedPokemon.getDefenseStatus());
-		    		    pokemonHPBar[player].setValue(selectedPokemon.getHP());
-		    		    // Player had to swap Pokemon after it fainted
-		    		    if(needToSwap != 0) {
-		    		    	enableMainMenu(true);
-		    		    	needToSwap = 0;
-		    		    }
+		    			pokemonHPBar[player].setValue(Math.round(selectedPokemon.getHP()*100/selectedPokemon.getMaxHP()));
+		    			// Player had to swap Pokemon after it fainted
+		    			if(needToSwap != 0) {
+		    		    		enableMainMenu(true);
+		    		    		needToSwap = 0;
+		    			}
 		    		}
-	            }
+	            	}
 		   });
 		   // Set delay
 		   timerSwap.setInitialDelay(100);
@@ -678,60 +682,58 @@ public class Game extends JFrame {
 	  // Format frame display
 	  frame.setResizable(false);
 	  frame.setPreferredSize(new Dimension(720, 1000));
-      frame.setLayout(new BorderLayout());
-      frame.add(lpane, BorderLayout.CENTER);
-      frame.add(subpanels[0], BorderLayout.CENTER);
-      frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+	  frame.setLayout(new BorderLayout());
+          frame.add(lpane, BorderLayout.CENTER);
+          frame.add(subpanels[0], BorderLayout.CENTER);
+          frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 	  
 	  // Game menu
-      lpane.setBounds(0, -5, 720, 1000);
-      // Start menu
-      subpanels[0].setBounds(0, 500, 720, 1000);
+      	  lpane.setBounds(0, -5, 720, 1000);
+      	  // Start menu
+          subpanels[0].setBounds(0, 500, 720, 1000);
 
-      // Create start buttons
-      for(int i = 0; i < startButtons.length; i++) {
-    	  startButtons[i].addActionListener(click);
-    	  startButtons[i].setBackground(new Color(0xb8ffc6));
-    	  startButtons[i].setPreferredSize(new Dimension(170, 100));
-    	  subpanels[0].add(startButtons[i]);
-      }
+      	  // Create start buttons
+      	  for(int i = 0; i < startButtons.length; i++) {
+    	  	startButtons[i].addActionListener(click);
+    	  	startButtons[i].setBackground(new Color(0xb8ffc6));
+    	 	 startButtons[i].setPreferredSize(new Dimension(170, 100));
+    	  	subpanels[0].add(startButtons[i]);
+	  }
        
-      setupBackground();
+	  setupBackground();
  
-      setupCurrentPokemon();
+	  setupCurrentPokemon();
        
-      setupEffects();
-            
-      setupDataSummary();
+	  setupEffects();
+        
+	  setupDataSummary();
 
-      setupBenchData();
+	  setupBenchData();
       
-      setupMenu();
+	  setupMenu();
       
-      setupCurrentPokemonData();
+	  setupCurrentPokemonData();
       
-      setupMuteButton();
+	  setupMuteButton();
 
-      // Create border for interactable part of GUI
-      subpanels[10].setBounds(0, 450, 704, 516);
-      subpanels[10].setBorder(new LineBorder(Color.BLACK, 2, true));
-      subpanels[10].setOpaque(false);
+     	  // Create border for interactable part of GUI
+	  subpanels[10].setBounds(0, 450, 704, 516);
+	  subpanels[10].setBorder(new LineBorder(Color.BLACK, 2, true));
+	  subpanels[10].setOpaque(false);
 
-      // Add panels to layered panel
-      for(int i = 1; i < subpanels.length; i++) {
-    	  lpane.add(subpanels[i], i-1, 0);
-      }
+	  // Add panels to layered panel
+          for(int i = 1; i < subpanels.length; i++) {
+		  lpane.add(subpanels[i], i-1, 0);
+	  }
 
-      // Game menu shouldn't be visible until battle is initialized
-      lpane.setVisible(false);
-      // Make start menu visible
-      subpanels[0].setVisible(true);
-      
-      // Make sure all methods are performed on frame before displaying it
-      frame.pack();
-      frame.setVisible(true);
+	  // Game menu shouldn't be visible until battle is initialized
+	  lpane.setVisible(false);
+	  // Make start menu visible
+	  subpanels[0].setVisible(true);
 
-      
+	  // Make sure all methods are performed on frame before displaying it
+	  frame.pack();
+	  frame.setVisible(true);  
   }
   
  /**********************************************************
@@ -779,7 +781,7 @@ public class Game extends JFrame {
   Return value: None
  **********************************************************/
   private void setupEffects() {
-	  // Set effect image for player selected Pokemon
+      // Set effect image for player selected Pokemon
       labelPokemon[2].setIcon(new ImageIcon("images/damage.png"));
       labelPokemon[2].setBounds(0, 0, 720, 1000);
       subpanels[4].add(labelPokemon[2]);
@@ -803,7 +805,7 @@ public class Game extends JFrame {
   Return value: None
  **********************************************************/
   private void setupDataSummary() {
-	  subpanels[6].add(dataSummary);
+      subpanels[6].add(dataSummary);
       subpanels[6].setBounds(0, 450, 704, 50);
       subpanels[6].setBackground(Color.WHITE);
       subpanels[6].setBorder(new LineBorder(Color.BLACK, 2, true));
@@ -834,7 +836,7 @@ public class Game extends JFrame {
   Return value: None
  **********************************************************/
   private void setupMenu() {
-	  // Set up main menu
+       // Set up main menu
       subpanels[8].setBounds(-8, 600, 720, 1000);
       subpanels[8].setOpaque(true);
       for(int i = 0; i < buttonsMainMenu.length; i++) {
@@ -873,23 +875,23 @@ public class Game extends JFrame {
 		  subpanels[11+i].setLayout(new BoxLayout(subpanels[11+i], BoxLayout.PAGE_AXIS));
 		  panelCurrentPokemonData[i] = new JPanel(new FlowLayout());
 		  // Add HP bar
-    	  pokemonHPBar[i] = new JProgressBar(0);
-    	  pokemonHPBar[i].setForeground(Color.GREEN.darker());
-    	  pokemonHPBar[i].setValue(100);
-    	  pokemonHPBar[i].setStringPainted(true);
-    	  // Add Pokemon name and stats
-    	  JLabel hp = new JLabel("HP");
-    	  currentPokemonName[i] = new JLabel("-");
-    	  currentPokemonStats[i] = new JLabel("Off: - Def: -");
-    	  panelCurrentPokemonData[i].add(hp);
-    	  panelCurrentPokemonData[i].add(pokemonHPBar[i]);
-    	  panelCurrentPokemonData[i].setOpaque(false);
-    	  subpanels[i+11].add(currentPokemonName[i]);
-    	  subpanels[i+11].add(currentPokemonStats[i]);
-    	  subpanels[i+11].add(panelCurrentPokemonData[i]);
-    	  subpanels[i+11].setOpaque(true);
-          subpanels[i+11].setBackground(Color.WHITE);
-          subpanels[i+11].setBorder(new LineBorder(Color.BLACK, 2, true));
+		  pokemonHPBar[i] = new JProgressBar(0);
+		  pokemonHPBar[i].setForeground(Color.GREEN.darker());
+		  pokemonHPBar[i].setValue(100);
+		  pokemonHPBar[i].setStringPainted(true);
+		  // Add Pokemon name and stats
+		  JLabel hp = new JLabel("HP");
+		  currentPokemonName[i] = new JLabel("-");
+		  currentPokemonStats[i] = new JLabel("Off: - Def: -");
+		  panelCurrentPokemonData[i].add(hp);
+		  panelCurrentPokemonData[i].add(pokemonHPBar[i]);
+		  panelCurrentPokemonData[i].setOpaque(false);
+		  subpanels[i+11].add(currentPokemonName[i]);
+		  subpanels[i+11].add(currentPokemonStats[i]);
+		  subpanels[i+11].add(panelCurrentPokemonData[i]);
+		  subpanels[i+11].setOpaque(true);
+		  subpanels[i+11].setBackground(Color.WHITE);
+		  subpanels[i+11].setBorder(new LineBorder(Color.BLACK, 2, true));
       }
       subpanels[11].setBounds(380, 300, 220, 70);
       subpanels[12].setBounds(170, 100, 220, 70);
@@ -904,15 +906,15 @@ public class Game extends JFrame {
   Return value: None
  **********************************************************/
   private void setupMuteButton() {
-	  subpanels[13].setBounds(600, 10, 100, 110);
+      subpanels[13].setBounds(600, 10, 100, 110);
       subpanels[13].setOpaque(false);
       subpanels[13].setVisible(true);
-	  mute.setBackground(new Color(0xb8ffc6));
-	  mute.setPreferredSize(new Dimension(80, 30));
-	  mute.addActionListener(click);
-	  mute.setEnabled(true);
-	  mute.setVisible(true);
-	  subpanels[13].add(mute);
+      mute.setBackground(new Color(0xb8ffc6));
+      mute.setPreferredSize(new Dimension(80, 30));
+      mute.addActionListener(click);
+      mute.setEnabled(true);
+      mute.setVisible(true);
+      subpanels[13].add(mute);
 	  
   }
   
@@ -934,9 +936,9 @@ public class Game extends JFrame {
 	  // Reset player and opponent selected Pokemon stats
 	  for(int i = 0; i < currentPokemonName.length; i++) {
 		  currentPokemonName[i].setText("-");
-    	  currentPokemonStats[i].setText("Off: - Def: -");
-    	  pokemonHPBar[i].setValue(100);
-    	  dataSummary.setText("");
+		  currentPokemonStats[i].setText("Off: - Def: -");
+		  pokemonHPBar[i].setValue(100);
+		  dataSummary.setText("");
 	  }
 	  // Disable main menu
 	  enableMainMenu(false);
