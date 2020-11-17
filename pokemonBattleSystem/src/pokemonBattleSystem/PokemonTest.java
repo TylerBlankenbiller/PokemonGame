@@ -11,7 +11,10 @@ import org.junit.*;
 
 public class PokemonTest {
 	
-	//Tests the constructor
+	/**********************************************************
+    Test name: checkStartingStats
+    Description: Checks pokemon initial stats
+   **********************************************************/
 	@Test
 	public void checkStartingStats() {
 		//Create new Charizard
@@ -20,14 +23,14 @@ public class PokemonTest {
 		//Run the asserts
 		assertEquals("Name is incorrect", "Charizard", pokemon.getName());
 		assertEquals("Index is incorrect", 1, pokemon.getIndex());
-		assertEquals("Pokemon hp is incorrect", 100, pokemon.getHP());
+		assertEquals("Pokemon hp is incorrect", 300, pokemon.getHP());
 		assertEquals("Offense status is incorrect", 7, pokemon.getOffenseStatus(), 0);
 		assertEquals("Defense status is incorrect", 5, pokemon.getDefenseStatus(), 0);
 		
 		//Checks the generated attacks
 		//Create the comparison attacks array
 		Attack[] attacks = new Attack[4];
-		String[] pokemonAttacks = {"Fire Fang", "Flamethrower", "Fire Blast", "Dragon Claw"};
+		String[] pokemonAttacks = {"Flamethrower", "Slash", "Fire Blitz", "Fire Breath"};
 		for(int i = 0; i< attacks.length; i++){
 			attacks[i] = new Attack(pokemonAttacks[i]);
 	      }
@@ -38,23 +41,29 @@ public class PokemonTest {
 		}
 	}
 	
-	//Tests to see if the pokemon takes the proper damage
+	/**********************************************************
+    Test name: checkDamage
+    Description: Checks setting HP
+   **********************************************************/
 	@Test
 	public void checkDamage() {
 		Pokemon target = new Pokemon("Venusaur", 1, 0);
 		target.setHP(30, 6);
-		assertEquals("Pokemon health after 30 damage is incorrect", 70, target.getHP(),  0);
+		assertEquals("Pokemon health after 30 damage is incorrect", 270, target.getHP(),  0);
 	}
 	
-	//Checks if a Pokemon with 0 or less HP is fainted
+	/**********************************************************
+    Test name: checkFainted
+    Description: Tests whether the fainted tag works as expected
+   **********************************************************/
 	@Test
 	public void checkFainted() {
 		Pokemon target = new Pokemon("Butterfree",1, 0);
 		target.setHP(80,5);
 		assertFalse("Pokemon should not be fainted", target.isFainted());//HP is 20
-		target.setHP(20,5);
+		target.setHP(200,5);
 		assertTrue("Pokemon should be fainted",target.isFainted());//HP is 0
-		target.setHP(20,5);
+		target.setHP(100,5);
 		assertTrue("Pokemon should be fainted",target.isFainted());//HP is -20
 	}
 
