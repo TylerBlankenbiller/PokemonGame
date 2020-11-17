@@ -337,15 +337,6 @@ public class Manager{
         return this.playerItems;
     }
     
-    /**********************************************************
- 	  Function name: getPlayerTurn
- 	  Description: Gets which turn it is
- 	  Parameters: None
- 	  Return value: The player turn integer
- 	 **********************************************************/
-   public int getPlayerTurn(){
-       return this.playerTurn;
-   }
     
     /**********************************************************
 	  Function name: getData
