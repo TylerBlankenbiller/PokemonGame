@@ -31,7 +31,7 @@ public class Attack
       if(AttackName.equalsIgnoreCase("Double-Edge")){
           setStats(new int[]{120, 30}, new int[]{0, 0}, new String[]{"Opponent", "User"});
       }
-      else if(AttackName.equalsIgnoreCase("Syntgesis")){
+      else if(AttackName.equalsIgnoreCase("Synthesis")){
           setStats(new int[]{-50}, new int[]{0}, new String[]{"User"});
       }
       else if(AttackName.equalsIgnoreCase("Seed Bomb")){
