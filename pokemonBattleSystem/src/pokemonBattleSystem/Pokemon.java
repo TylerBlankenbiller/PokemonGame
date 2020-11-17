@@ -132,8 +132,8 @@ public class Pokemon
       OffenseStatus = myOffenseStatus;
       DefenseStatus = myDefenseStatus;
       for(int i = 0; i < 4; i++){
-          OffenseList[i] = myOffenseStatus * (float)(0.4 + (i * 0.15));
-          DefenseList[i] = myDefenseStatus * (float)(0.4 + (i * 0.15));
+          OffenseList[i] = myOffenseStatus * (float)(0.4 + (i * 0.5));
+          DefenseList[i] = myDefenseStatus * (float)(0.4 + (i * 0.5));
       }
       for(int i = 5; i < 9; i++){
           OffenseList[i] = myOffenseStatus * (float)(1 + ((i-4)*0.4));

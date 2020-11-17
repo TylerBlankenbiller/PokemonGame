@@ -331,11 +331,21 @@ public class Manager{
 	  Function name: getPlayerItems
 	  Description: Gets player's item set
 	  Parameters: None
-	  Return value: None
+	  Return value: Item array containing player Items
 	 **********************************************************/
     public Item[] getPlayerItems(){
         return this.playerItems;
     }
+    
+    /**********************************************************
+ 	  Function name: getPlayerTurn
+ 	  Description: Gets which turn it is
+ 	  Parameters: None
+ 	  Return value: The player turn integer
+ 	 **********************************************************/
+   public int getPlayerTurn(){
+       return this.playerTurn;
+   }
     
     /**********************************************************
 	  Function name: getData
