@@ -7,10 +7,14 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
+<<<<<<< HEAD
 	<classpathentry kind="lib" path="C:/Users/trish/Downloads/junit-4.13.1.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
+=======
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+>>>>>>> 16ca8c0fb3c09dff7c4c884ff224b5d193457ff0
 	<classpathentry kind="output" path="bin"/>
 </classpath>
