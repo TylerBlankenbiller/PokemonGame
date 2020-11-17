@@ -15,7 +15,7 @@ public class PokemonTest {
 	@Test
 	public void checkStartingStats() {
 		//Create new Charizard
-		Pokemon pokemon = new Pokemon("Charizard", 1);
+		Pokemon pokemon = new Pokemon("Charizard", 1, 0);
 		
 		//Run the asserts
 		assertEquals("Name is incorrect", "Charizard", pokemon.getName());
@@ -27,7 +27,7 @@ public class PokemonTest {
 		//Checks the generated attacks
 		//Create the comparison attacks array
 		Attack[] attacks = new Attack[4];
-		String[] pokemonAttacks = {"Fire Breath", "Wing Attack", "Ember", "Slash"};
+		String[] pokemonAttacks = {"Fire Fang", "Flamethrower", "Fire Blast", "Dragon Claw"};
 		for(int i = 0; i< attacks.length; i++){
 			attacks[i] = new Attack(pokemonAttacks[i]);
 	      }
@@ -41,7 +41,7 @@ public class PokemonTest {
 	//Tests to see if the pokemon takes the proper damage
 	@Test
 	public void checkDamage() {
-		Pokemon target = new Pokemon("Venusaur", 1);
+		Pokemon target = new Pokemon("Venusaur", 1, 0);
 		target.setHP(30, 6);
 		assertEquals("Pokemon health after 30 damage is incorrect", 70, target.getHP(),  0);
 	}
@@ -49,7 +49,7 @@ public class PokemonTest {
 	//Checks if a Pokemon with 0 or less HP is fainted
 	@Test
 	public void checkFainted() {
-		Pokemon target = new Pokemon("Butterfree",1);
+		Pokemon target = new Pokemon("Butterfree",1, 0);
 		target.setHP(80,5);
 		assertFalse("Pokemon should not be fainted", target.isFainted());//HP is 20
 		target.setHP(20,5);

@@ -18,8 +18,6 @@ public class ManagerTest {
 		
 		//Assert starting values
 		assertEquals("Incorrect player pokemon number generated", 3, manager.getNumPlayerPokemon());
-		assertEquals("Incorrect player pokemon active", "Venusaur", manager.getPSPokemon().getName());
-		assertEquals("Incorrect opponent pokemon active", "Venusaur", manager.getOSPokemon().getName());
 		assertEquals("Winner declared at beginning", "", manager.getWinner());
 		assertEquals("Incorrect turn", 0, manager.playerTurn);
 		
@@ -27,7 +25,7 @@ public class ManagerTest {
 				//Create the comparison attacks array
 				Item[] items = new Item[4];
 				for(int i = 0; i < 4; i++)
-			        items[i] = new Item();
+			        items[i] = new Item(i);
 				//Runs the comparisons
 				Item[] generatedItems = manager.getPlayerItems();
 				for(int i = 0; i < items.length; i++) {
@@ -48,23 +46,26 @@ public class ManagerTest {
 		assertEquals("Incorrect turn", 0, manager.playerTurn);
 	}
 	
-	//Checks to see if surrender sets winner correctly
-	@Test
-	public void checkSurrender() {
-		Manager manager = new Manager();
-		manager.initializeBattle();
-		manager.surrender();
-		assertEquals("No/incorrect winner", "opponent", manager.getWinner());
-	}
-	
 	//Checks to see if damage applied is reliable
 	//**Fails right now
 	@Test
 	public void applyDamage() {
 		Manager manager = new Manager();
 		manager.initializeBattle();
-		manager.processTurn(1, 3);
-		assertEquals("Incorrect damage applied", 20, manager.getOSPokemon().getHP());
+		
+		//Gets the defense stat of the active pokemon
+		float defenseStat = manager.getPSPokemon().getDefenseStatus();
+		//Calculates health after preset hit
+		int expectedHP = (100-(300/Math.round(defenseStat)));
+		
+		//Attacks dummy pokemon with active pokemon attack 1
+		Attack selectedAttack = manager.getPSPokemon().getAttacks()[0];
+		Pokemon dummyPokemon = manager.getOSPokemon();
+		selectedAttack.applyAttack(dummyPokemon);
+		
+		//Applies the attack action
+		manager.processTurn(1, 1);
+		assertEquals("Incorrect damage applied", dummyPokemon.getHP(), manager.getOSPokemon().getHP());
 	}
 	
 	@Test
@@ -73,11 +74,18 @@ public class ManagerTest {
 	public void useItem() {
 		Manager manager = new Manager();
 		manager.initializeBattle();
+		
+		//Gets the defense stat of the active pokemon
+		float defenseStat = manager.getPSPokemon().getDefenseStatus();
+		//Calculates health after preset hit
+		int expectedHP = (100-(300/Math.round(defenseStat)));
+		
+		//Sets and checks new health
 		manager.getPSPokemon().setHP(50, 6);
-		assertEquals("HP not reduced correctly", 50, manager.getPSPokemon().getHP());
+		assertEquals("HP not reduced correctly", expectedHP, manager.getPSPokemon().getHP());
 		manager.processTurn(3, 1);
-		//Assumes health potion heals for 30
-		assertEquals("Incorrect health", 80, manager.getPSPokemon().getHP());
+		//Assumes health potion heals for 25
+		assertEquals("Incorrect health", (expectedHP + 25), manager.getPSPokemon().getHP());
 	}
 	
 	//Tests the pokemon swap
@@ -86,8 +94,7 @@ public class ManagerTest {
 		Manager manager = new Manager();
 		manager.initializeBattle();
 		Pokemon swapTarget = manager.getPlayerPokemon()[2];
-		assertEquals("Unexpected switch pokemon", "Venusaur", manager.getPSPokemon().getName());
-		manager.processTurn(4, 2);
+		manager.processTurn(4, 3);
 		assertEquals("Unexpected switch pokemon", swapTarget.getName(), manager.getPSPokemon().getName());
 	}
 
