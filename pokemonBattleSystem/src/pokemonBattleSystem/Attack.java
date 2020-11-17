@@ -14,47 +14,15 @@ public class Attack
   private int[] Magnitude;
   private String[] Target;//User, UserOffense, UserDefense, Opp...
   
-  /*
-      Constructor
-      AttackName - Name of Attack Object to create
-      Creates specific Attack Object based on string arugment
-  */
+  /**********************************************************
+  Function name: Attack
+  Description: Constructor to initialize Attack data
+  Parameters: String AttackName - name of attack
+  Return value: None
+ **********************************************************/
   public Attack(String AttackName){
-     /* if(AttackName == null){
-          System.out.println("Please Specify an Attack");
-          "Vine Whip", 
-          "Razer Leaf", 
-          "Seed Bomb", 
-          "Leaf Storm"
-          "Fire Fang", 
-          "Flamethrower", 
-          "Fire Blast", 
-          "Dragon Claw"
-          "Waterfall", 
-          "Ice Punch", 
-          "Hydro Pump", 
-          "Water Pulse"
-          "Gust", 
-          "Bug Bite", 
-          "Air Slash", 
-          "Tackle"
-          "Double-Edge", 
-          "Fury Attack", 
-          "Pin Missile", 
-          "Take Down"
-          "Quick Attack", 
-          "Wing Attack",
-          "Crunch",
-          "Aerial Ace", 
-          "Pluck", 
-          "Drill Peck"
-          "Poison Sting", 
-          "Acid Spray", 
-          "Bite"
-          "Thunder Shock", "Thunderbolt", "Tail Whip", "Thunder Punch"
-          return null;
-      }*/
       Name = AttackName;
+      // Set damage based on attack name
       if(AttackName.equalsIgnoreCase("Vine Whip") || AttackName.equalsIgnoreCase("Gust") || AttackName.equalsIgnoreCase("Quick Attack")){
     	  this.damage = 25;
           //setStats(new int[]{20, 40}, new int[]{0, 0}, new String[]{"Opponent", "User"});
@@ -102,15 +70,23 @@ public class Attack
       
   }
   
-  void setStats(int[] damage, int[] magnitude, String[] target){
-      
-  }
-  
+ /**********************************************************
+  Function name: applyAttack
+  Description: Updates Pokemon stats based on Attack
+  Parameters: Pokemon target - Pokemon to apply attack to
+  Return value: Float containing total damage applied
+ **********************************************************/
   public float applyAttack(Pokemon target){
 	  float totalDamage = target.setHP(this.damage, target.getOffenseStatus());
       return totalDamage;
   }
   
+ /**********************************************************
+  Function name: getName
+  Description: Get name of Attack
+  Parameters: None
+  Return value: String containing name of Attack
+ **********************************************************/
   public String getName(){
       return this.Name;
   }

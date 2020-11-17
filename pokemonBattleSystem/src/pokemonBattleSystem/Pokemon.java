@@ -11,7 +11,9 @@ import java.lang.Math;
 public class Pokemon
 {
   private String name;
+  // Unique identifier
   private int index;
+  // Status data
   private int HP;
   private float OffenseStatus;
   private float DefenseStatus;
@@ -22,24 +24,25 @@ public class Pokemon
   private String Type;
   protected Attack[] Attacks = new Attack[4];
   
+  // Images
   private String choosePokemon[] = new String[4];
   private String callBackPokemon[] = new String[4];
   private String icon;
-  /*
-      Constructor
-      PokemonName - Name of Pokemon Object to create
-      Creates specific Pokemon Object based on string arugment
-  */
+
+ /**********************************************************
+  Function name: Pokemon
+  Description: Constructor to initialize Pokemon data
+  Parameters: String PokemonName - name of Pokemon
+  			  int index - unique identifier
+  			  int player - player or opponent
+  Return value: None
+ **********************************************************/
   public Pokemon(String PokemonName, int index, int player){
-	  
-    /*  if(PokemonName == null){
-          System.out.println("Please Specify a Pokemon");
-          return null;
-      }*/
       this.name = PokemonName;
       this.index = index;
       this.icon = "images/" + PokemonName + "icon.png";
       
+      // Set images when choosing Pokemon
       this.choosePokemon[0] = "images/pokeball.png";
       this.choosePokemon[1] = "images/open pokeball.png";
       this.choosePokemon[2] = "images/" + PokemonName + "discolored";
@@ -53,6 +56,7 @@ public class Pokemon
           this.choosePokemon[3] += "front.png";
       }
       
+      // Set images when calling back Pokemon
       this.callBackPokemon[0] = "images/" + PokemonName;
       this.callBackPokemon[1] = "images/" + PokemonName + "discolored";
       
@@ -67,11 +71,10 @@ public class Pokemon
       this.callBackPokemon[2] = "images/open pokeball.png";
       this.callBackPokemon[3] = "images/pokeball.png";
       
+      // Set stats based on Pokemon name
       if(PokemonName.equalsIgnoreCase("Venusaur")){
           String[] pokemonAttacks = {"Vine Whip", "Razer Leaf", "Seed Bomb", "Leaf Storm"};
           setStats(100, 6, 6, "Grass", pokemonAttacks);
-          
-          //choosePokemon = new String[]{"pokeball.png", "open pokeball.png", };
       }
       else if(PokemonName.equalsIgnoreCase("Charizard")){
     	  String[] pokemonAttacks = {"Fire Fang", "Flamethrower", "Fire Blast", "Dragon Claw"};
@@ -112,6 +115,16 @@ public class Pokemon
       
   }
   
+ /**********************************************************
+  Function name: setStats
+  Description: Sets Pokemon stats based on input
+  Parameters: int myHP - Pokemon health
+  			  float myOffenseStatus - Pokemon offense
+  			  float myDefenseStatus - Pokemon defense
+  			  String myType - Pokemon type
+  			  String myAttacks[] - array of attacks
+  Return value: None
+ **********************************************************/
   void setStats(int myHP, float myOffenseStatus, float myDefenseStatus, String myType, String myAttacks[]){
       HP = myHP;
       OffenseStatus = myOffenseStatus;
@@ -132,24 +145,25 @@ public class Pokemon
       }
   }
   
-  //Check if HP is less than equal to 0 (fainted, not usable in battle)
+ /**********************************************************
+  Function name: isFainted
+  Description: Checks if Pokemon is fainted
+  Parameters: None
+  Return value: True if Pokemon is fainted, false otherwise
+ **********************************************************/
   boolean isFainted(){
       if(HP > 0)
           return false;
       return true;
   }
   
-  //Set Functions
-  void setOffenseStatus(int statusChange){
-      OffensePointer += statusChange;
-      OffenseStatus = OffenseList[OffensePointer];
-  }
-  
-  void setDefenseStatus(int statusChange){
-      DefensePointer += statusChange;
-      DefenseStatus = DefenseList[DefensePointer];
-  }
-  
+  /**********************************************************
+  Function name: setHP
+  Description: Sets HP based on input
+  Parameters: int damage - damage to deal
+  			  float offense - opponent's offense
+  Return value: Integer containing total damage applied
+ **********************************************************/
   int setHP(int damage, float offense){
       int applyDamage = Math.round((offense * damage) / DefenseStatus);
       if(HP - applyDamage < 0) {
@@ -160,6 +174,13 @@ public class Pokemon
       }
       return applyDamage;
   }
+  
+  /**********************************************************
+  Function name: heal
+  Description: Adds value to Pokemon HP
+  Parameters: float value - number to increment Pokemon HP by
+  Return value: None
+ **********************************************************/
   void heal(float value) {
 	  if(this.HP + value > 100) {
 		  this.HP = 100;
@@ -168,44 +189,113 @@ public class Pokemon
 		  this.HP += value;
 	  }
   }
-  void increaseOffense(float value) {
+  
+ /**********************************************************
+  Function name: setOffenseStatus
+  Description: Sets offense status based on input
+  Parameters: int statusChange - value to change status by
+  Return value: None
+ **********************************************************/
+  void setOffenseStatus(float value) {
 	  this.OffenseStatus += value;
   }
   
-  void increaseDefense(float value) {
+ /**********************************************************
+  Function name: setDefenseStatus
+  Description: Sets defense status based on input
+  Parameters: int statusChange - value to change status by
+  Return value: None
+ **********************************************************/
+  void setDefenseStatus(float value) {
 	  this.DefenseStatus += value;
   }
-  //Get Functions
+
+ /**********************************************************
+  Function name: getOffenseStatus
+  Description: Gets offense status
+  Parameters: None
+  Return value: Float containing Pokemon offense status
+ **********************************************************/
   float getOffenseStatus(){
       return OffenseStatus;
   }
+  
+ /**********************************************************
+  Function name: getDefenseStatus
+  Description: Gets defense status
+  Parameters: None
+  Return value: Float containing Pokemon defense status
+ **********************************************************/
   float getDefenseStatus(){
       return DefenseStatus;
   }
+  
+  /**********************************************************
+  Function name: getHP
+  Description: Gets health
+  Parameters: None
+  Return value: Integer containing Pokemon health
+ **********************************************************/
   int getHP(){
       return HP;
   }
   
+ /**********************************************************
+  Function name: getAttacks
+  Description: Gets Pokemon attacks
+  Parameters: None
+  Return value: Attack array containing Pokemon attacks
+ **********************************************************/
   public Attack[] getAttacks(){
       return this.Attacks;
   }
   
+ /**********************************************************
+  Function name: getName
+  Description: Gets Pokemon name
+  Parameters: None
+  Return value: String containing Pokemon name
+ **********************************************************/
   public String getName(){
       return this.name;
   }
   
+ /**********************************************************
+  Function name: getIndex
+  Description: Gets Pokemon unique identifier
+  Parameters: None
+  Return value: Integer containing Pokemon index
+ **********************************************************/
   public int getIndex() {
 	  return this.index;
   }
   
+ /**********************************************************
+  Function name: getChoosePokemon
+  Description: Gets images for choosing Pokemon
+  Parameters: None
+  Return value: String array containing image strings
+ **********************************************************/
   public String[] getChoosePokemon() {
 	  return this.choosePokemon;
   }
   
+ /**********************************************************
+  Function name: getCallBackPokemon
+  Description: Gets images for calling back Pokemon
+  Parameters: None
+  Return value: String array containing image strings
+ **********************************************************/
   public String[] getCallBackPokemon() {
 	  return this.callBackPokemon;
   }
   
+ /**********************************************************
+  Function name: getIcon
+  Description: Gets icon image for Pokemon
+  Parameters: None
+  Return value: String containing image string for icon
+ **********************************************************/
   public String getIcon(){
 	  return this.icon;
   }
