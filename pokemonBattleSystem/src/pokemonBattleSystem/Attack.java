@@ -107,7 +107,7 @@ public class Attack
   }
   
   public float applyAttack(Pokemon target){
-	  float totalDamage = target.SetHP(this.damage, target.GetOffenseStatus());
+	  float totalDamage = target.setHP(this.damage, target.getOffenseStatus());
       return totalDamage;
   }
   

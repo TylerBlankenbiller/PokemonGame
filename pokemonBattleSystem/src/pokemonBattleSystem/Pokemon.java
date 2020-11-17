@@ -140,17 +140,17 @@ public class Pokemon
   }
   
   //Set Functions
-  void SetOffenseStatus(int statusChange){
+  void setOffenseStatus(int statusChange){
       OffensePointer += statusChange;
       OffenseStatus = OffenseList[OffensePointer];
   }
   
-  void SetDefenseStatus(int statusChange){
+  void setDefenseStatus(int statusChange){
       DefensePointer += statusChange;
       DefenseStatus = DefenseList[DefensePointer];
   }
   
-  int SetHP(int damage, float offense){
+  int setHP(int damage, float offense){
       int applyDamage = Math.round((offense * damage) / DefenseStatus);
       if(HP - applyDamage < 0) {
     	  HP = 0;
@@ -176,13 +176,13 @@ public class Pokemon
 	  this.DefenseStatus += value;
   }
   //Get Functions
-  float GetOffenseStatus(){
+  float getOffenseStatus(){
       return OffenseStatus;
   }
-  float GetDefenseStatus(){
+  float getDefenseStatus(){
       return DefenseStatus;
   }
-  int GetHP(){
+  int getHP(){
       return HP;
   }
   

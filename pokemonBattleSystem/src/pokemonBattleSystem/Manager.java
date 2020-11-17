@@ -130,7 +130,7 @@ public class Manager{
                                         + this.damageApplied + " damage to " 
                                         + opponentSet[osPokemon].getName() 
                                         + " (Opponent).";
-                    if(opponentSet[osPokemon].GetHP() <= 0) {
+                    if(opponentSet[osPokemon].getHP() <= 0) {
                     	data += " " + opponentSet[osPokemon].getName() + " has fainted!";
                     }
                 }
@@ -144,7 +144,7 @@ public class Manager{
                                         + this.damageApplied + " damage to " 
                                         + playerSet[psPokemon].getName() 
                                         + " (Player).";
-                    if(playerSet[psPokemon].GetHP() <= 0) {
+                    if(playerSet[psPokemon].getHP() <= 0) {
                     	data += " " + playerSet[psPokemon].getName() + " has fainted!";
                     }
                 }
@@ -211,7 +211,7 @@ public class Manager{
         	}
         }
         
-        if(opponentSet[osPokemon].GetHP() <= 0) {
+        if(opponentSet[osPokemon].getHP() <= 0) {
         	menuOption = 4;
         	subMenuOption = rand.nextInt(3) + 1;
         	while(opponentSet[subMenuOption - 1].isFainted()) {
@@ -229,7 +229,7 @@ public class Manager{
 	        			menuOption = 1;
 	        		}
 	        		else {
-	        			while(opponentItems[subMenuOption - 1].used || (opponentItems[subMenuOption - 1].getName().equals("Heal Potion") && opponentSet[osPokemon].GetHP() >= 100)) {
+	        			while(opponentItems[subMenuOption - 1].used || (opponentItems[subMenuOption - 1].getName().equals("Heal Potion") && opponentSet[osPokemon].getHP() >= 100)) {
 	        				subMenuOption = rand.nextInt(4) + 1;
 	        			}
 	        		}

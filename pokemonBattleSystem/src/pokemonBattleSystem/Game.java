@@ -186,13 +186,13 @@ public class Game extends JFrame {
 		  swapAnimation(3, 1, arr, 0);
 		  opponentPokemon = manager.getOSPokemon();
 		  currentPokemonName[1].setText(opponentPokemon.getName());
-    	  currentPokemonStats[1].setText("Off: " + opponentPokemon.GetOffenseStatus() + " Def: " + opponentPokemon.GetDefenseStatus());
+    	  currentPokemonStats[1].setText("Off: " + opponentPokemon.getOffenseStatus() + " Def: " + opponentPokemon.getDefenseStatus());
     	 // Pokemon playerPokemon[] = manager.getPlayerPokemon();
     	  for(int i = 0; i < playerPokemon.length; i++) {
     		  labelPokemonData[i].setText("<html>" + playerPokemon[i].getName() 
-    				  					+ "<br>HP: " + playerPokemon[i].GetHP() 
-    				  					+ "<br>Def: " + playerPokemon[i].GetDefenseStatus() 
-    				  					+ " Off: " + playerPokemon[i].GetOffenseStatus() + "</html>");
+    				  					+ "<br>HP: " + playerPokemon[i].getHP() 
+    				  					+ "<br>Def: " + playerPokemon[i].getDefenseStatus() 
+    				  					+ " Off: " + playerPokemon[i].getOffenseStatus() + "</html>");
     	  }
 	  }
 	  
@@ -210,7 +210,7 @@ public class Game extends JFrame {
 					 swapAnimation(3, 0, arr, 0);
 					 
 					  currentPokemonName[0].setText(playerPokemon.getName());
-			    	  currentPokemonStats[0].setText("Off: " + playerPokemon.GetOffenseStatus() + " Def: " + playerPokemon.GetDefenseStatus());
+			    	  currentPokemonStats[0].setText("Off: " + playerPokemon.getOffenseStatus() + " Def: " + playerPokemon.getDefenseStatus());
 					 //swapAnimation(0, 0, "images/pokeball.gif", "images/open pokeball.png", "images/v3temp.png", "images/v3.gif", "", "", "", "");
 					 break;
 				 }
@@ -259,9 +259,9 @@ public class Game extends JFrame {
 					 optionData.setText("Player has swapped to " + playerPokemon.getName() + ".");
 					 
 				 }
-    		    	//pokemonHPBar[0].setValue(p[i].GetHP());
+    		    	//pokemonHPBar[0].setValue(p[i].getHP());
     		    	currentPokemonName[0].setText(playerPokemon.getName());
-    		    	  currentPokemonStats[0].setText("Off: " + playerPokemon.GetOffenseStatus() + " Def: " + playerPokemon.GetDefenseStatus());
+    		    	  currentPokemonStats[0].setText("Off: " + playerPokemon.getOffenseStatus() + " Def: " + playerPokemon.getDefenseStatus());
 				// t = 0;
 				  break;
 			  }
@@ -289,13 +289,13 @@ public class Game extends JFrame {
 				  optionData.setText(data);
 				  Pokemon opponentPokemon = manager.getOSPokemon();
       			 // int osPokemon = manager.getOSPokemon();
-				  pokemonHPBar[1].setValue(opponentPokemon.GetHP());
-				 // System.out.print(opponentPokemon.GetHP());
+				  pokemonHPBar[1].setValue(opponentPokemon.getHP());
+				 // System.out.print(opponentPokemon.getHP());
 				  if(manager.checkForWinner()) {
 					  endGame();
 					  return;
 				  }
-				  else if(opponentPokemon.GetHP() <= 0) {
+				  else if(opponentPokemon.getHP() <= 0) {
 					  int index = manager.processCPUTurn();
 					  opponentPokemon = manager.getOSPokemon();
 					  //Pokemon newOpponentPokemon = manager.getOSPokemon();
@@ -307,10 +307,10 @@ public class Game extends JFrame {
 					  
 					  swapAnimation(7, 1, arr, 0);
 					  }
-					  //pokemonHPBar[1].setValue(opponentPokemon.GetHP());
+					  //pokemonHPBar[1].setValue(opponentPokemon.getHP());
 					  //optionData.setText("Opponent has swapped to " + p[osPokemon].getName() + ".");
 					  currentPokemonName[1].setText(opponentPokemon.getName());
-    		    	  currentPokemonStats[1].setText("Off: " + opponentPokemon.GetOffenseStatus() + " Def: " + opponentPokemon.GetDefenseStatus());
+    		    	  currentPokemonStats[1].setText("Off: " + opponentPokemon.getOffenseStatus() + " Def: " + opponentPokemon.getDefenseStatus());
     		    	  //String data = manager.getData();
 	      			  //	optionData.setText(data);
 					  completeRound();
@@ -334,11 +334,11 @@ public class Game extends JFrame {
 				  effectAnimation(0, "images/item.png", "sound/emerald_000F.wav");
 				  manager.processTurn(3, i+1);
 				  labelPokemonData[playerPokemon.getIndex()].setText("<html>" + playerPokemon.getName() 
-		  					+ "<br>HP: " + playerPokemon.GetHP()
-		  					+ "<br>Def: " + playerPokemon.GetDefenseStatus() 
-		  					+ " Off: " + playerPokemon.GetOffenseStatus() + "</html>");
-				  currentPokemonStats[0].setText("Off: " + playerPokemon.GetOffenseStatus() + " Def: " + playerPokemon.GetDefenseStatus());
-			      pokemonHPBar[0].setValue(playerPokemon.GetHP());
+		  					+ "<br>HP: " + playerPokemon.getHP()
+		  					+ "<br>Def: " + playerPokemon.getDefenseStatus() 
+		  					+ " Off: " + playerPokemon.getOffenseStatus() + "</html>");
+				  currentPokemonStats[0].setText("Off: " + playerPokemon.getOffenseStatus() + " Def: " + playerPokemon.getDefenseStatus());
+			      pokemonHPBar[0].setValue(playerPokemon.getHP());
 				  String data = manager.getData();
       			  optionData.setText(data);
 				  completeRound();
@@ -399,9 +399,9 @@ public class Game extends JFrame {
 	            			effectImage = "images/item.png";
 	            			sound = "sound/emerald_000F.wav";
 	            			effectAnimation(1, effectImage, sound);
-	            			pokemonHPBar[1].setValue(opponentPokemon.GetHP());
+	            			pokemonHPBar[1].setValue(opponentPokemon.getHP());
 	  					  //optionData.setText("Opponent has swapped to " + p[osPokemon].getName() + ".");
-	      		    	  currentPokemonStats[1].setText("Off: " + opponentPokemon.GetOffenseStatus() + " Def: " + opponentPokemon.GetDefenseStatus());
+	      		    	  currentPokemonStats[1].setText("Off: " + opponentPokemon.getOffenseStatus() + " Def: " + opponentPokemon.getDefenseStatus());
 	            		}
 	            		/*else if (index == 4){
 	            			swapAnimation(1, 0, "images/c3.png","images/c3temp.png","images/open pokeball.png","images/pokeball.gif", "images/pokeball.gif", "images/open pokeball.png", "images/c3temp.png", "images/c3.png");
@@ -414,7 +414,7 @@ public class Game extends JFrame {
 	      			  Pokemon playerPokemon = manager.getPSPokemon();
 	      			  //int psPokemon = manager.getPSPokemon();
 	      			  String pokemonNameLabel = playerPokemon.getName() + " (Fainted)";
-	      			  float pokemonHPLabel = playerPokemon.GetHP();
+	      			  float pokemonHPLabel = playerPokemon.getHP();
 	      			  
 	      			if(manager.checkForWinner()) {
 						  endGame();
@@ -430,9 +430,9 @@ public class Game extends JFrame {
 	      			  }
 	      			labelPokemonData[playerPokemon.getIndex()].setText("<html>" + pokemonNameLabel 
   					+ "<br>HP: " + pokemonHPLabel
-  					+ "<br>Def: " + playerPokemon.GetDefenseStatus() 
-  					+ " Off: " + playerPokemon.GetOffenseStatus() + "</html>");
-	      			  pokemonHPBar[0].setValue(playerPokemon.GetHP());
+  					+ "<br>Def: " + playerPokemon.getDefenseStatus() 
+  					+ " Off: " + playerPokemon.getOffenseStatus() + "</html>");
+	      			  pokemonHPBar[0].setValue(playerPokemon.getHP());
 	      			
 	      			//displayPokemon();
 	      			  timer4.stop();
@@ -531,12 +531,12 @@ public class Game extends JFrame {
 		    		    	if(index == 1) {
 		    		    		Pokemon opponentPokemon = manager.getOSPokemon();
 		    		    		//int osPokemon = manager.getOSPokemon();
-		    		    		pokemonHPBar[index].setValue(opponentPokemon.GetHP());
+		    		    		pokemonHPBar[index].setValue(opponentPokemon.getHP());
 		    		    	}
 		    		    	else {
 		    		    		Pokemon playerPokemon = manager.getPSPokemon();
 		    		    		//int psPokemon = manager.getPSPokemon();
-		    		    		pokemonHPBar[index].setValue(playerPokemon.GetHP());
+		    		    		pokemonHPBar[index].setValue(playerPokemon.getHP());
 		    		    	}
 		    		    	String data = manager.getData();
 		      			  	optionData.setText(data);
@@ -823,7 +823,7 @@ public class Game extends JFrame {
 			  if(items[i].used == false) {
 				  buttonsSubMenu[i].setEnabled(true);
 			  }
-			  if(items[i].used == true || (playerPokemon.GetHP() >= 100 && items[i].getName().equals("Heal Potion"))) {
+			  if(items[i].used == true || (playerPokemon.getHP() >= 100 && items[i].getName().equals("Heal Potion"))) {
 				  buttonsSubMenu[i].setEnabled(false);
 			  }
 			  buttonsSubMenu[i].setText(items[i].getName());
