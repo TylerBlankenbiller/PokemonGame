@@ -60,7 +60,7 @@ public class Manager{
     	Random rand = new Random(); 
         // Generate Player's bench
         for(int i = 0; i < playerSet.length; i++){
-        	int pokemonListIndex = rand.nextInt(9);
+        	int pokemonListIndex = rand.nextInt(10);
             this.playerSet[i] = new Pokemon(pokemonList[pokemonListIndex], i, 0);
         }
         // Generate opponent's pokemon
@@ -140,7 +140,7 @@ public class Manager{
                 	// Update damage applied
                     this.damageApplied = playerSet[psPokemon]
                                     .getAttacks()[subMenuOption]
-                                    .applyAttack(opponentSet[osPokemon]);
+                                    .applyAttack(opponentSet[osPokemon], playerSet[psPokemon]);
                     // Update data summary
                     this.data = playerSet[psPokemon].getName() 
                                         + " (Player) has used " + playerSet[psPokemon]
@@ -157,7 +157,7 @@ public class Manager{
                 	// Update date applied
                     this.damageApplied = opponentSet[osPokemon]
                                     .getAttacks()[subMenuOption]
-                                    .applyAttack(playerSet[psPokemon]);
+                                    .applyAttack(playerSet[psPokemon], playerSet[psPokemon]);
                     // Update data summary
                     this.data = opponentSet[osPokemon].getName() 
                                         + " (Opponent) has used " + opponentSet[osPokemon]

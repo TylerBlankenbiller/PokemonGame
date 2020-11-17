@@ -24,8 +24,8 @@ public class Item{
     	this.index = index;
     	// Item to heal
     	if(index == 0) {
-    		this.name = "Heal Potion";
-    		this.magnitude = 25;
+    		this.name = "Super Potion";
+    		this.magnitude = 50;
     		this.resetStatus = false;
     	}
     	// Item to increase offense

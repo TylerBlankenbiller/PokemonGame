@@ -15,6 +15,7 @@ public class Pokemon
   private int index;
   // Status data
   private int HP;
+  private int MaxHP;
   private float OffenseStatus;
   private float DefenseStatus;
   private float[] OffenseList = new float[9];
@@ -73,45 +74,45 @@ public class Pokemon
       
       // Set stats based on Pokemon name
       if(PokemonName.equalsIgnoreCase("Venusaur")){
-          String[] pokemonAttacks = {"Vine Whip", "Razer Leaf", "Seed Bomb", "Leaf Storm"};
-          setStats(100, 6, 6, "Grass", pokemonAttacks);
+          String[] pokemonAttacks = {"Double-Edge", "Growth", "Seed Bomb", "Syntgesis"};
+          setStats(300, 6, 6, "Grass", pokemonAttacks);
       }
       else if(PokemonName.equalsIgnoreCase("Charizard")){
-    	  String[] pokemonAttacks = {"Fire Fang", "Flamethrower", "Fire Blast", "Dragon Claw"};
-          setStats(100, 7, 5, "Fire", pokemonAttacks);
+    	  String[] pokemonAttacks = {"Flamethrower", "Slash", "Fire Blitz", "Fire Breath"};
+          setStats(300, 7, 5, "Fire", pokemonAttacks);
       }
       else if(PokemonName.equalsIgnoreCase("Blastoise")){
-    	  String[] pokemonAttacks = {"Waterfall", "Ice Punch", "Hydro Pump", "Water Pulse"};
-          setStats(100, 5, 7, "Water", pokemonAttacks);
+    	  String[] pokemonAttacks = {"Hydro Pump", "Skull Bash", "Tail Whip", "Rain Dance"};
+          setStats(300, 5, 7, "Water", pokemonAttacks);
       }
       else if(PokemonName.equalsIgnoreCase("Butterfree")){
-    	  String[] pokemonAttacks = {"Gust", "Bug Bite", "Air Slash", "Tackle"};
-          setStats(100, 6, 5, "Bug", pokemonAttacks);
+    	  String[] pokemonAttacks = {"Gust", "Safeguard", "Psybeam", "Curse"};
+          setStats(240, 6, 5, "Bug", pokemonAttacks);
       }
       else if(PokemonName.equalsIgnoreCase("Beedrill")){
-    	  String[] pokemonAttacks = {"Double-Edge", "Fury Attack", "Pin Missile", "Take Down"};
-          setStats(100, 6, 5, "Bug", pokemonAttacks);
+    	  String[] pokemonAttacks = {"Pin Missile", "Twin Needle", "Focus Energy", "Curse"};
+          setStats(240, 6, 5, "Bug", pokemonAttacks);
       }
       else if(PokemonName.equalsIgnoreCase("Pidgeot")){
-    	  String[] pokemonAttacks = {"Quick Attack", "Gust", "Wing Attack", "Air Slash"};
-          setStats(100, 5, 5, "Flying", pokemonAttacks);
+    	  String[] pokemonAttacks = {"Sand Attack", "Focus Energy", "Wing Attack", "Rest"};
+          setStats(300, 5, 5, "Flying", pokemonAttacks);
       }
       else if(PokemonName.equalsIgnoreCase("Raticate")){
     	  String[] pokemonAttacks = {"Tackle", "Quick Attack", "Crunch", "Double-Edge"};
-          setStats(100, 5, 5, "Normal", pokemonAttacks);
+          setStats(240, 5, 5, "Normal", pokemonAttacks);
       }
       else if(PokemonName.equalsIgnoreCase("Fearow")){
     	  String[] pokemonAttacks = {"Fury Attack", "Aerial Ace", "Pluck", "Drill Peck"};
-          setStats(100, 6, 4, "Flying", pokemonAttacks);
+          setStats(240, 6, 4, "Flying", pokemonAttacks);
       }
       else if(PokemonName.equalsIgnoreCase("Arbok")){
     	  String[] pokemonAttacks = {"Crunch", "Poison Sting", "Acid Spray", "Bite"};
-          setStats(100, 6, 5, "Poison", pokemonAttacks);
+          setStats(240, 6, 5, "Poison", pokemonAttacks);
       }
       else if(PokemonName.equalsIgnoreCase("Pikachu")){
     	  String[] pokemonAttacks = {"Thunder Shock", "Thunderbolt", "Tail Whip", "Thunder Punch"};
-          setStats(100, 6, 5, "Electric", pokemonAttacks);
-      }
+          setStats(240, 6, 5, "Electric", pokemonAttacks);
+      }//Hello
       
   }
   
@@ -127,6 +128,7 @@ public class Pokemon
  **********************************************************/
   void setStats(int myHP, float myOffenseStatus, float myDefenseStatus, String myType, String myAttacks[]){
       HP = myHP;
+      MaxHP = myHP;
       OffenseStatus = myOffenseStatus;
       DefenseStatus = myDefenseStatus;
       for(int i = 0; i < 4; i++){
@@ -134,8 +136,8 @@ public class Pokemon
           DefenseList[i] = myDefenseStatus * (float)(0.4 + (i * 0.15));
       }
       for(int i = 5; i < 9; i++){
-          OffenseList[i] = myOffenseStatus * (float)(1 + ((i-4)*0.15));
-          DefenseList[i] = myDefenseStatus * (float)(1 + ((i-4)*0.15));
+          OffenseList[i] = myOffenseStatus * (float)(1 + ((i-4)*0.4));
+          DefenseList[i] = myDefenseStatus * (float)(1 + ((i-4)*0.4));
       }
       OffensePointer = 4;
       DefensePointer = 4;
@@ -171,6 +173,8 @@ public class Pokemon
       }
       else {
     	  HP -= applyDamage;
+    	  if(HP > MaxHP)
+    		  HP = MaxHP;
       }
       return applyDamage;
   }
@@ -182,8 +186,8 @@ public class Pokemon
   Return value: None
  **********************************************************/
   void heal(float value) {
-	  if(this.HP + value > 100) {
-		  this.HP = 100;
+	  if(this.HP + value > this.MaxHP) {
+		  this.HP = this.MaxHP;
 	  }
 	  else {
 		  this.HP += value;
@@ -197,7 +201,13 @@ public class Pokemon
   Return value: None
  **********************************************************/
   void setOffenseStatus(float value) {
-	  this.OffenseStatus += value;
+	  //this.OffenseStatus += value;
+	   this.OffensePointer += (int)value;
+	  if(this.OffensePointer < 0)
+		  this.OffensePointer = 0;
+	  else if(this.OffensePointer > 8)
+		  this.OffensePointer = 8;
+	  this.OffenseStatus = this.OffenseList[this.OffensePointer];
   }
   
  /**********************************************************
@@ -207,7 +217,13 @@ public class Pokemon
   Return value: None
  **********************************************************/
   void setDefenseStatus(float value) {
-	  this.DefenseStatus += value;
+	  //this.DefenseStatus += value;
+	   this.DefensePointer += (int)value;
+	  if(this.DefensePointer < 0)
+		  this.DefensePointer = 0;
+	  else if(this.DefensePointer > 8)
+		  this.DefensePointer = 8;
+	  this.DefenseStatus = this.DefenseList[this.DefensePointer];
   }
 
  /**********************************************************
@@ -238,6 +254,16 @@ public class Pokemon
  **********************************************************/
   int getHP(){
       return HP;
+  }
+  
+  /**********************************************************
+  Function name: getMaxHP
+  Description: Gets health
+  Parameters: None
+  Return value: Integer containing Pokemon health
+ **********************************************************/
+  int getMaxHP(){
+      return MaxHP;
   }
   
  /**********************************************************
