@@ -352,7 +352,11 @@ public class Game extends JFrame {
 				  dataSummary.setText(data);
 				  // Update opponent's HP bar
 				  Pokemon opponentPokemon = manager.getOSPokemon();
-				  pokemonHPBar[1].setValue(opponentPokemon.getHP());
+				  pokemonHPBar[1].setValue(Math.round(opponentPokemon.getHP()*100/opponentPokemon.getMaxHP()));
+				  // Update current Pokemon data
+				  currentPokemonName[1].setText(opponentPokemon.getName());
+		    	  currentPokemonStats[1].setText("Off: " + opponentPokemon.getOffenseStatus() 
+		    	  							   + " Def: " + opponentPokemon.getDefenseStatus());
 				  // Reset option
 				  option = -1;
 				  // Check if there is a winner after processing player's turn
@@ -413,7 +417,7 @@ public class Game extends JFrame {
 				  // Update current player Pokemon data
 				  currentPokemonStats[0].setText("Off: " + playerPokemon.getOffenseStatus() 
 				  							   + " Def: " + playerPokemon.getDefenseStatus());
-			      	 pokemonHPBar[0].setValue(playerPokemon.getHP());
+			      	 pokemonHPBar[0].setValue(Math.round(playerPokemon.getHP()*100/playerPokemon.getMaxHP()));
 			      	 // Display data summary after processing player's turn
 				 String data = manager.getData();
       			  	 dataSummary.setText(data);
@@ -497,7 +501,7 @@ public class Game extends JFrame {
 	        		 	 // Do effect animation use item
 	        		 	 effectAnimation(1, "images/item.png", "sound/emerald_000F.wav");
 	        		 	 // Update current opponent Pokemon data
-	        		 	 pokemonHPBar[1].setValue(opponentPokemon.getHP());
+	        		 	 pokemonHPBar[1].setValue(Math.round(opponentPokemon.getHP()*100/opponentPokemon.getMaxHP()));
 	  		    	  	currentPokemonStats[1].setText("Off: " + opponentPokemon.getOffenseStatus() 
 	  		    	  							   + " Def: " + opponentPokemon.getDefenseStatus());
 	        	  	}
@@ -530,7 +534,9 @@ public class Game extends JFrame {
   					+ "<br>HP: " + pokemonHPLabel
   					+ "<br>Def: " + playerPokemon.getDefenseStatus() 
   					+ " Off: " + playerPokemon.getOffenseStatus() + "</html>");
-	      			  pokemonHPBar[0].setValue(playerPokemon.getHP());
+	      			  pokemonHPBar[0].setValue(Math.round(playerPokemon.getHP()*100/playerPokemon.getMaxHP()));
+                      currentPokemonStats[0].setText("Off: " + playerPokemon.getOffenseStatus() 
+	  		    	  							   + " Def: " + playerPokemon.getDefenseStatus());
 	      		  	// Stop timer
 	      		  	timerCompleteRound.stop();
 	      		  	// Player needs to swap Pokemon
@@ -637,7 +643,7 @@ public class Game extends JFrame {
 		    			currentPokemonName[player].setText(selectedPokemon.getName());
 		    			currentPokemonStats[player].setText("Off: " + selectedPokemon.getOffenseStatus() 
 		    		    	  							   + " Def: " + selectedPokemon.getDefenseStatus());
-		    			pokemonHPBar[player].setValue(selectedPokemon.getHP());
+		    			pokemonHPBar[player].setValue(Math.round(selectedPokemon.getHP()*100/selectedPokemon.getMaxHP()));
 		    			// Player had to swap Pokemon after it fainted
 		    			if(needToSwap != 0) {
 		    		    		enableMainMenu(true);
