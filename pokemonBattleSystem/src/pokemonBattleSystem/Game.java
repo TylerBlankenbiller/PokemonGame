@@ -535,6 +535,8 @@ public class Game extends JFrame {
   					+ "<br>Def: " + playerPokemon.getDefenseStatus() 
   					+ " Off: " + playerPokemon.getOffenseStatus() + "</html>");
 	      			  pokemonHPBar[0].setValue(Math.round(playerPokemon.getHP()*100/playerPokemon.getMaxHP()));
+                      currentPokemonStats[0].setText("Off: " + playerPokemon.getOffenseStatus() 
+	  		    	  							   + " Def: " + playerPokemon.getDefenseStatus());
 	      		  	// Stop timer
 	      		  	timerCompleteRound.stop();
 	      		  	// Player needs to swap Pokemon
