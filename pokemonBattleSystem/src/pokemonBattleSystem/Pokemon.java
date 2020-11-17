@@ -74,7 +74,7 @@ public class Pokemon
       
       // Set stats based on Pokemon name
       if(PokemonName.equalsIgnoreCase("Venusaur")){
-          String[] pokemonAttacks = {"Double-Edge", "Growth", "Seed Bomb", "Syntgesis"};
+          String[] pokemonAttacks = {"Double-Edge", "Growth", "Seed Bomb", "Synthesis"};
           setStats(300, 6, 6, "Grass", pokemonAttacks);
       }
       else if(PokemonName.equalsIgnoreCase("Charizard")){
