@@ -41,7 +41,7 @@ public class Item{
     	// Item to increase offense and defense
     	else if(index == 3) {
     		this.name = "Guard Spec";
-    		this.magnitude = 3;
+    		this.magnitude = 2;
     	}
     }
     

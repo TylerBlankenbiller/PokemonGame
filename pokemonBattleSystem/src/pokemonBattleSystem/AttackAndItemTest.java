@@ -23,7 +23,7 @@ public class AttackAndItemTest {
 		Attack attack = new Attack("Double-Edge");
 		attack.applyAttack(opponentPokemon, playerPokemon);
 		assertEquals("Opponent health not correct", 120, opponentPokemon.getHP());
-		assertEquals("Player health not correct", 214, playerPokemon.getHP());
+		assertEquals("Player health not correct", 279, playerPokemon.getHP());
 	}
 	
 	/**********************************************************
@@ -92,8 +92,8 @@ public class AttackAndItemTest {
 			item.applyItem(opponentPokemon);
 		}
 		assertEquals("Opponent health not correct", 215, opponentPokemon.getHP());
-		assertEquals("Opponent offense not correct", 16, Math.round(opponentPokemon.getOffenseStatus()), 0);
-		assertEquals("Opponent defense not correct", 13, Math.round(opponentPokemon.getDefenseStatus()), 0);
+		assertEquals("Opponent offense not correct", 18, Math.round(opponentPokemon.getOffenseStatus()), 0);
+		assertEquals("Opponent defense not correct", 15, Math.round(opponentPokemon.getDefenseStatus()), 0);
 	}
 	
 	/**********************************************************
@@ -111,8 +111,8 @@ public class AttackAndItemTest {
 			item.applyItem(playerPokemon);
 		}
 		assertEquals("Player health not correct", 250, playerPokemon.getHP());
-		assertEquals("Player offense not correct", 13, Math.round(playerPokemon.getOffenseStatus()), 0);
-		assertEquals("Player defense not correct", 18, Math.round(playerPokemon.getDefenseStatus()), 0);
+		assertEquals("Player offense not correct", 15, Math.round(playerPokemon.getOffenseStatus()), 0);
+		assertEquals("Player defense not correct", 21, Math.round(playerPokemon.getDefenseStatus()), 0);
 	}
 
 }

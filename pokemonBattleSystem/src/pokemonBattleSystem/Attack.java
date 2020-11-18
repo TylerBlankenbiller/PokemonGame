@@ -47,7 +47,7 @@ public class Attack
           setStats(new int[] {70}, new int[] {0}, new String[]{"Opponent"});
       }
       else if(AttackName.equalsIgnoreCase("Flamethrower")){
-          setStats(new int[] {90, 0}, new int[] {0, -1}, new String[]{"Opponent", "OpponentOffense"});
+          setStats(new int[] {90, 0}, new int[] {0, -1}, new String[]{"Opponent", "OpponentDefense"});
       }
       else if(AttackName.equalsIgnoreCase("Fire Breath")){
           setStats(new int[]{60, 0}, new int[] {0, -1}, new String[]{"Opponent", "OpponentOffense"});
@@ -59,6 +59,9 @@ public class Attack
           setStats(new int[]{65, 0}, new int[] {0, 1}, new String[]{"Opponent", "UserDefense"});
       }
       else if(AttackName.equalsIgnoreCase("Tail Whip")){
+          setStats(new int[]{0}, new int[] {-1}, new String[]{"OpponentDefense"});
+      }
+      else if(AttackName.equalsIgnoreCase("Leer")){
           setStats(new int[]{0}, new int[] {-1}, new String[]{"OpponentDefense"});
       }
       else if(AttackName.equalsIgnoreCase("Rain Dance")){
@@ -92,7 +95,31 @@ public class Attack
           setStats(new int[]{0}, new int[] {-1}, new String[]{"OpponentOffense"});
       }
       else if(AttackName.equalsIgnoreCase("Rest")){
-          setStats(new int[]{-1000}, new int[] {-12}, new String[]{"User", "OpponentOffense"});
+          setStats(new int[]{-1000, 0}, new int[] {0, -12}, new String[]{"User", "UserOffense"});
+      }
+      else if(AttackName.equalsIgnoreCase("Roost")){
+          setStats(new int[]{-50}, new int[] {0}, new String[]{"User"});
+      }
+      else if(AttackName.equalsIgnoreCase("Hyper Fang")){
+          setStats(new int[]{72}, new int[] {0}, new String[]{"Opponent"});
+      }
+      else if(AttackName.equalsIgnoreCase("Drill Peck")){
+          setStats(new int[]{80}, new int[] {0}, new String[]{"Opponent"});
+      }
+      else if(AttackName.equalsIgnoreCase("Toxic")){
+          setStats(new int[]{0}, new int[] {-2}, new String[]{"OpponentDefense"});
+      }
+      else if(AttackName.equalsIgnoreCase("Poison Jab")){
+          setStats(new int[]{80, 0}, new int[] {0, -1}, new String[]{"Opponent", "OpponentDefense"});
+      }
+      else if(AttackName.equalsIgnoreCase("Glare")){
+          setStats(new int[]{0}, new int[] {-1}, new String[]{"OpponentOffense"});
+      }
+      else if(AttackName.equalsIgnoreCase("Thunderbolt")){
+          setStats(new int[]{80, 0}, new int[] {0, -1}, new String[]{"Opponent", "OpponentOffense"});
+      }
+      else if(AttackName.equalsIgnoreCase("Double Team")){
+          setStats(new int[]{0}, new int[] {1}, new String[]{"UserDefense"});
       }
       else{
           System.out.println("Sorry we don't support that Move");
@@ -127,9 +154,10 @@ public class Attack
 			  totalDamage = target.setHP(this.Damage[i], own.getOffenseStatus());}
 		  if(this.Target[i] == "User") {
 			  System.out.println("User");
-			  own.setHP(this.Damage[0], own.getOffenseStatus());}
+			  own.setHP(this.Damage[i], own.getOffenseStatus());}
 		  else if(this.Target[i] == "UserOffense") {
 			  System.out.println("UserOffense");
+			  System.out.println(this.Magnitude[i]);
 			  own.setOffenseStatus(this.Magnitude[i]);}
 		  else if(this.Target[i] == "UserDefense") {
 			  System.out.println("UserDefense");

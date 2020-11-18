@@ -98,19 +98,19 @@ public class Pokemon
           setStats(300, 5, 5, "Flying", pokemonAttacks);
       }
       else if(PokemonName.equalsIgnoreCase("Raticate")){
-    	  String[] pokemonAttacks = {"Tackle", "Quick Attack", "Crunch", "Double-Edge"};
+    	  String[] pokemonAttacks = {"Hyper Fang", "Focus Energy", "Tail Whip", "Double-Edge"};
           setStats(240, 5, 5, "Normal", pokemonAttacks);
       }
       else if(PokemonName.equalsIgnoreCase("Fearow")){
-    	  String[] pokemonAttacks = {"Fury Attack", "Aerial Ace", "Pluck", "Drill Peck"};
+    	  String[] pokemonAttacks = {"Leer", "Roost", "Focus Energy", "Drill Peck"};
           setStats(240, 6, 4, "Flying", pokemonAttacks);
       }
       else if(PokemonName.equalsIgnoreCase("Arbok")){
-    	  String[] pokemonAttacks = {"Crunch", "Poison Sting", "Acid Spray", "Bite"};
+    	  String[] pokemonAttacks = {"Toxic", "Poison Jab", "Glare", "Rest"};
           setStats(240, 6, 5, "Poison", pokemonAttacks);
       }
       else if(PokemonName.equalsIgnoreCase("Pikachu")){
-    	  String[] pokemonAttacks = {"Thunder Shock", "Thunderbolt", "Tail Whip", "Thunder Punch"};
+    	  String[] pokemonAttacks = {"Double Team", "Thunderbolt", "Tail Whip", "Rest"};
           setStats(240, 6, 5, "Electric", pokemonAttacks);
       }//Hello
       
@@ -132,13 +132,15 @@ public class Pokemon
       OffenseStatus = myOffenseStatus;
       DefenseStatus = myDefenseStatus;
       for(int i = 0; i < 4; i++){
-          OffenseList[i] = myOffenseStatus * (float)(0.4 + (i * 0.5));
-          DefenseList[i] = myDefenseStatus * (float)(0.4 + (i * 0.5));
+          OffenseList[i] = myOffenseStatus * (float)(0.4 + (i * 0.15));
+          DefenseList[i] = myDefenseStatus * (float)(0.4 + (i * 0.15));
       }
       for(int i = 5; i < 9; i++){
-          OffenseList[i] = myOffenseStatus * (float)(1 + ((i-4)*0.4));
-          DefenseList[i] = myDefenseStatus * (float)(1 + ((i-4)*0.4));
+          OffenseList[i] = myOffenseStatus * (float)(1 + ((i-4)*0.5));
+          DefenseList[i] = myDefenseStatus * (float)(1 + ((i-4)*0.5));
       }
+      OffenseList[4] = myOffenseStatus;
+      DefenseList[4] = myDefenseStatus;
       OffensePointer = 4;
       DefensePointer = 4;
       Type = myType;
@@ -207,6 +209,9 @@ public class Pokemon
 		  this.OffensePointer = 0;
 	  else if(this.OffensePointer > 8)
 		  this.OffensePointer = 8;
+	  System.out.println("Offense Change");
+	  System.out.println(this.OffenseList[this.OffensePointer]);
+	  System.out.println(this.OffensePointer);
 	  this.OffenseStatus = this.OffenseList[this.OffensePointer];
   }
   

@@ -74,7 +74,7 @@ public class ManagerTest {
 		selectedAttack.applyAttack(opponentPokemon, playerPokemon);
 		
 		//Applies the attack action
-		manager.processTurn(1, 1);
+		manager.processTurn(0, 1);
 		assertEquals("Incorrect damage applied", opponentPokemon.getHP(), manager.getOSPokemon().getHP());
 	}
 	

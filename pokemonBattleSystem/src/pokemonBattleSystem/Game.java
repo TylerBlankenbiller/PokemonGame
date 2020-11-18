@@ -990,10 +990,10 @@ public class Game extends JFrame {
 			  if(items[i].used == false) {
 				  buttonsSubMenu[i].setEnabled(true);
 			  }
-			  if(items[i].used == true 
-				|| (playerPokemon.getHP() >= 100 && items[i].getName().equals("Heal Potion"))) {
+			  /*if(items[i].used == true 
+				|| (playerPokemon.getHP() >= 100 && items[i].getName().equals("Super Potion"))) {
 				  buttonsSubMenu[i].setEnabled(false);
-			  }
+			  }*/
 			  buttonsSubMenu[i].setText(items[i].getName());
 		  }
 	  }

@@ -60,7 +60,7 @@ public class Manager{
     	Random rand = new Random(); 
         // Generate Player's bench
         for(int i = 0; i < playerSet.length; i++){
-        	int pokemonListIndex = rand.nextInt(10);
+        	int pokemonListIndex = rand.nextInt(6);
             this.playerSet[i] = new Pokemon(pokemonList[pokemonListIndex], i, 0);
         }
         // Generate opponent's pokemon
@@ -157,7 +157,7 @@ public class Manager{
                 	// Update date applied
                     this.damageApplied = opponentSet[osPokemon]
                                     .getAttacks()[subMenuOption]
-                                    .applyAttack(playerSet[psPokemon], playerSet[psPokemon]);
+                                    .applyAttack(playerSet[psPokemon], opponentSet[osPokemon]);
                     // Update data summary
                     this.data = opponentSet[osPokemon].getName() 
                                         + " (Opponent) has used " + opponentSet[osPokemon]
@@ -255,10 +255,10 @@ public class Manager{
 	        		}
 	        		else {
 	        			// Loop until selected item hasn't been used or Pokemon has full HP and heal potion is selected
-	        			while(opponentItems[subMenuOption].used 
-	        					|| (opponentItems[subMenuOption].getName().equals("Heal Potion") && opponentSet[osPokemon].getHP() >= 100)) {
+	        			/*while(opponentItems[subMenuOption].used 
+	        					|| (opponentItems[subMenuOption].getName().equals("Super Potion") && opponentSet[osPokemon].getHP() >= 100)) {
 	        				subMenuOption = rand.nextInt(4);
-	        			}
+	        			}*/
 	        		}
 	        	}
 	            
@@ -331,12 +331,11 @@ public class Manager{
 	  Function name: getPlayerItems
 	  Description: Gets player's item set
 	  Parameters: None
-	  Return value: Item array containing player Items
+	  Return value: None
 	 **********************************************************/
     public Item[] getPlayerItems(){
         return this.playerItems;
     }
-    
     
     /**********************************************************
 	  Function name: getData
