@@ -11,9 +11,9 @@ public class Attack
   private String Name;
   //private int[] Damage;
   private int damage;
-  private int[] Damage = new int[3];
-  private int[] Magnitude = new int[3];
-  private String[] Target = new String[3];//User, UserOffense, UserDefense, Opp...
+  private int[] Damage = new int[5];
+  private int[] Magnitude = new int[5];
+  private String[] Target = new String[5];//User, UserOffense, UserDefense, Opp...
   
   /**********************************************************
   Function name: Attack
@@ -95,7 +95,7 @@ public class Attack
           setStats(new int[]{0}, new int[] {-1}, new String[]{"OpponentOffense"});
       }
       else if(AttackName.equalsIgnoreCase("Rest")){
-          setStats(new int[]{-1000, 0, 0}, new int[] {0, -12, -12}, new String[]{"User", "UserOffense", "UserDefense"});
+          setStats(new int[]{-1000, 0, 0, 0, 0}, new int[] {0, -12, -12, 1, 1}, new String[]{"User", "UserOffense", "UserDefense", "UserOffense", "UserDefense"});
       }
       else if(AttackName.equalsIgnoreCase("Roost")){
           setStats(new int[]{-50}, new int[] {0}, new String[]{"User"});
@@ -133,7 +133,7 @@ public class Attack
 		  Magnitude[i] = magnitudes[i];
 		  Target[i] = targets[i];
       }
-	  for(int i = damages.length; i < 3; i++){
+	  for(int i = damages.length; i < 5; i++){
 		  Damage[i] = 0;
 		  Magnitude[i] = 0;
 		  Target[i] = "None";
@@ -148,7 +148,7 @@ public class Attack
  **********************************************************/
   public float applyAttack(Pokemon target, Pokemon own){
 	  float totalDamage = 0;
-	  for(int i = 0; i < 3; i++){
+	  for(int i = 0; i < this.Damage.length; i++){
 		  if(this.Target[i] == "Opponent") {
 			  System.out.println("Opponent");
 			  totalDamage = target.setHP(this.Damage[i], own.getOffenseStatus());}
